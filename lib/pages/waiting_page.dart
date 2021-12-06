@@ -35,7 +35,9 @@ class WaitingPage extends StatelessWidget {
               widgets.headingTexts(
                 blackText: 'Created Successfully.',
               ),
-
+              const SizedBox(
+                height: 10,
+              ),
               const Text('JobsWay will Verify Your Company and Provide',
                   ),
               const Text(' the Dashboard to you within 1 - 2 days',
