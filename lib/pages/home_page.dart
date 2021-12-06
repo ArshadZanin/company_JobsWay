@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/pages/dashboard.dart';
+import 'package:jobs_way_company/pages/jobs_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
         body: const TabBarView(
           children: <Widget>[
             DashboardPage(),
-            DashboardPage(),
+            JobsPage(),
             DashboardPage(),
             DashboardPage(),
           ],

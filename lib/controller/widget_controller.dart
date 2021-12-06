@@ -146,9 +146,6 @@ class WidgetController extends GetxController {
   }
 
   Widget jobCardBlack({
-    required String srcImage,
-    required String companyName,
-    String? companyLocation,
     required String jobName,
     String? salaryRange,
     String? experience,
@@ -158,103 +155,69 @@ class WidgetController extends GetxController {
   }) {
     return Card(
       color: const Color(0xFF2C2C2C),
-      child: ListTile(
-        onTap: onTap,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  decoration: BoxDecoration(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ListTile(
+          onTap: onTap,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                jobName,
+                style: const TextStyle(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.network(
-                      srcImage,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '₹$salaryRange',
+                style: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '$experience experience',
+                style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                '$postTime ago',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                jobTime,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white
                 ),
-                const SizedBox(
-                  width: 50,
+                child: const Text(
+                  'see applicants',
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
-                Column(
-                  children: [
-                    Text(
-                      companyName,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      companyLocation!,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Text(
-              jobName,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '₹$salaryRange',
-              style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '$experience experience',
-              style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              '$postTime ago',
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 1,
-            ),
-            Text(
-              jobTime,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              'Know more...',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -518,7 +481,7 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget applicantList({required String name}) {
+  Widget applicantList({required String name,Function()? onPress}) {
     return Card(
       color: const Color(0xFFB8E8F2),
       child: ListTile(
@@ -530,16 +493,28 @@ class WidgetController extends GetxController {
           ),
         ),
         subtitle: const Text('has completed the task'),
-        trailing: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              const Color(0xFF03C852),
+        trailing: Column(
+          children: [
+            greenButton(
+              label: 'Contact',
+              onPress: onPress
             ),
-          ),
-          onPressed: () {},
-          child: const Text('Contact'),
+          ],
         ),
       ),
     );
   }
+
+  Widget greenButton({Function()? onPress, required String label}){
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          const Color(0xFF03C852),
+        ),
+      ),
+      onPressed: () {},
+      child: Text(label),
+    );
+  }
+
 }
