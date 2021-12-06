@@ -517,4 +517,128 @@ class WidgetController extends GetxController {
     );
   }
 
+  Widget redButton({Function()? onPress, required String label}){
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          const Color(0xFFFF4E4E),
+        ),
+      ),
+      onPressed: () {},
+      child: Text(label),
+    );
+  }
+
+  Widget applicationList({
+  required String imageSrc,
+    required String name,
+    required String place,
+    required String email,
+    required String phone,
+    required String experience,
+    required String jobTitle,
+    required Widget button
+}){
+    return Card(
+      color: const Color(0xFFE6E6E6),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 140,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.grey,
+                  ),
+                  // child: Image.network(imageSrc,fit: BoxFit.cover,),
+                ),
+                const SizedBox(width: 10,),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                        ),
+                      ),
+                      iconText(
+                        icon: Icons.location_on_outlined,
+                        text: place
+                      ),
+                      iconText(
+                          icon: Icons.email_outlined,
+                          text: email
+                      ),
+                      iconText(
+                          icon: Icons.phone_outlined,
+                          text: phone
+                      ),
+                      iconText(
+                          icon: Icons.person_pin_outlined,
+                          text: 'Portfolio'
+                      ),
+                      iconText(
+                          icon: Icons.text_snippet_outlined ,
+                          text: 'Resume'
+                      ),
+                      iconText(
+                          icon: Icons.upcoming_outlined,
+                          text: '$experience of Experience'
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                      'Applied For : ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        ),
+                  ),
+                  Text(
+                    jobTitle,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,),
+                  ),
+                ],
+              ),
+            ),
+            button,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget iconText({IconData? icon, String text = ''}){
+    return Row(
+      children: [
+        Icon(icon,color: Colors.black,),
+        Text(
+          text,
+          style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14
+          ),
+        ),
+      ],
+    );
+  }
+
 }
