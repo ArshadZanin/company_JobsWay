@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/pages/application_page.dart';
 import 'package:jobs_way_company/pages/dashboard.dart';
 import 'package:jobs_way_company/pages/jobs_page.dart';
+import 'package:jobs_way_company/pages/shortlisted_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -25,8 +27,8 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             DashboardPage(),
             JobsPage(),
-            DashboardPage(),
-            DashboardPage(),
+            ApplicationPage(),
+            ShortListedPage(),
           ],
         ),
         bottomNavigationBar: const Material(
