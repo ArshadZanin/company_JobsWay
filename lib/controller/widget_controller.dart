@@ -137,8 +137,7 @@ class WidgetController extends GetxController {
       ),
       actions: [
         IconButton(
-            onPressed: () {
-            },
+            onPressed: () {},
             icon: const Icon(
               Icons.account_circle_outlined,
             )),
@@ -261,7 +260,10 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget iconTextButton({required IconData icon, required String text, required Function() onPress}){
+  Widget iconTextButton(
+      {required IconData icon,
+      required String text,
+      required Function() onPress}) {
     return TextButton(
       onPressed: onPress,
       child: Column(
@@ -271,19 +273,21 @@ class WidgetController extends GetxController {
             color: const Color(0xff000000),
             size: 50,
           ),
-          Text(text,style: const TextStyle(color: Color(0xff000000)),),//0xff008080
+          Text(
+            text,
+            style: const TextStyle(color: Color(0xff000000)),
+          ), //0xff008080
         ],
       ),
     );
   }
 
   Widget completeTaskCard({
-  required Function() onPress,
+    required Function() onPress,
     required String srcImage,
     required String companyName,
     String? companyLocation,
-
-}){
+  }) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Card(
@@ -302,8 +306,8 @@ class WidgetController extends GetxController {
                   child: Row(
                     children: [
                       Container(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -355,7 +359,8 @@ class WidgetController extends GetxController {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
-                ),const Text(
+                ),
+                const Text(
                   'Duration\t: 30 min',
                   style: TextStyle(
                       color: Colors.white,
@@ -366,9 +371,7 @@ class WidgetController extends GetxController {
                   padding: const EdgeInsets.all(16.0),
                   child: Center(
                       child: textColorButton(
-                          text: 'Start Task',
-                          onPress: onPress)
-                  ),
+                          text: 'Start Task', onPress: onPress)),
                 ),
               ],
             ),
@@ -378,7 +381,7 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget pendingField(Function()? onPress){
+  Widget pendingField(Function()? onPress) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFFFE39C)),
@@ -393,7 +396,8 @@ class WidgetController extends GetxController {
       ),
     );
   }
-  Widget approvedField(Function()? onPress){
+
+  Widget approvedField(Function()? onPress) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFF03C852)),
@@ -408,7 +412,8 @@ class WidgetController extends GetxController {
       ),
     );
   }
-  Widget rejectField(Function()? onPress){
+
+  Widget rejectField(Function()? onPress) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(const Color(0xFFFF4E4E)),
@@ -425,11 +430,11 @@ class WidgetController extends GetxController {
   }
 
   Widget jobDetailsCard({
-  required Widget statusWidget,
+    required Widget statusWidget,
     required String srcImage,
     required String jobName,
     String jobLocation = '',
-}){
+  }) {
     return Card(
       color: const Color(0xFF2C2C2C),
       shape: RoundedRectangleBorder(
@@ -437,8 +442,7 @@ class WidgetController extends GetxController {
       ),
       child: ListTile(
         leading: Container(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -455,8 +459,8 @@ class WidgetController extends GetxController {
         title: Text(
           jobName,
           style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+            color: Colors.white,
+            fontSize: 16,
           ),
         ),
         subtitle: Text(
@@ -471,7 +475,7 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget skillText({required String text}){
+  Widget skillText({required String text}) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -480,12 +484,62 @@ class WidgetController extends GetxController {
       ),
       child: Text(
         text,
-        style: const TextStyle(
-            color: Colors.white,
-        fontSize: 20),),
+        style: const TextStyle(color: Colors.white, fontSize: 20),
+      ),
     );
   }
 
+  Widget dashContainer(int count, String label) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xFFE6E6E6)),
+        child: Column(
+          children: [
+            Text(
+              '$count',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-
+  Widget applicantList({required String name}) {
+    return Card(
+      color: const Color(0xFFB8E8F2),
+      child: ListTile(
+        title: Text(
+          name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF004756),
+          ),
+        ),
+        subtitle: const Text('has completed the task'),
+        trailing: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              const Color(0xFF03C852),
+            ),
+          ),
+          onPressed: () {},
+          child: const Text('Contact'),
+        ),
+      ),
+    );
+  }
 }

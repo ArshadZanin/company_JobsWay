@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/login_register/register.dart';
+import 'package:jobs_way_company/pages/home_page.dart';
 
 class LogIn extends StatelessWidget {
   LogIn({Key? key}) : super(key: key);
@@ -57,7 +58,12 @@ class LogIn extends StatelessWidget {
                   widgets.textColorButton(
                       text: 'Sign In',
                       onPress: () {
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage(),),);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HomePage(),
+                          ),
+                        );
                       }),
                   const SizedBox(
                     height: 15,
