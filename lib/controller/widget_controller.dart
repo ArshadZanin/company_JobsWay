@@ -529,8 +529,27 @@ class WidgetController extends GetxController {
           const Color(0xFFFF4E4E),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPress,
       child: Text(label),
+    );
+  }
+
+  Widget blueButton({Function()? onPress, required String label, bool colorGrey = false}) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          colorGrey == false ? const Color(0xFF0060A5) : const Color(0xFFE6E6E6),
+        ),
+      ),
+      onPressed: onPress,
+      child: Text(
+        label,
+        style: TextStyle(
+            color: colorGrey == false ?
+            Colors.white :
+            Colors.black,
+        ),
+      ),
     );
   }
 

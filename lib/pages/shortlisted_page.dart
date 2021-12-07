@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/pages/assign_task.dart';
 import 'package:jobs_way_company/pages/task_list.dart';
 
 class ShortListedPage extends StatefulWidget {
@@ -57,7 +58,14 @@ class _ShortListedPageState extends State<ShortListedPage> {
                       experience: '2 Years',
                       jobTitle: 'Sr.Flutter Developer',
                       button: widgets.textColorButton(
-                          text: 'Assign Task', onPress: () {}),
+                          text: 'Assign Task', onPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AssignTask(),
+                          ),
+                        );
+                      }),
                     );
                   }),
             ),
