@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   itemCount: 50,
                   itemBuilder: (context, index){
                     return widgets.applicantList(
-                        name: 'Arshad Sanin'
+                        name: 'Arshad Sanin', onPress: () {  }
                     );
                   }
               ),

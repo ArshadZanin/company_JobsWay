@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/pages/task_list.dart';
 
 class ShortListedPage extends StatefulWidget {
   const ShortListedPage({Key? key}) : super(key: key);
@@ -10,7 +11,6 @@ class ShortListedPage extends StatefulWidget {
 }
 
 class _ShortListedPageState extends State<ShortListedPage> {
-
   final widgets = Get.put(WidgetController());
 
   @override
@@ -28,17 +28,24 @@ class _ShortListedPageState extends State<ShortListedPage> {
                 children: [
                   widgets.headingVersaTexts(colorText: 'Short Listed.'),
                   widgets.greenButton(
-                    label: 'Set Tasks',
-                    onPress: (){}
-                  ),
+                      label: 'Set Tasks',
+                      onPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => TaskList(),
+                          ),
+                        );
+                      }),
                 ],
               ),
             ),
+
             ///application list
             Expanded(
               child: ListView.builder(
                   itemCount: 50,
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return widgets.applicationList(
                       imageSrc: 'https://3.bp.blogspot.com/-YyJv82hXTbM/'
                           'T02ep1RC8oI/AAAAAAAAU7M/UD9sZ_mzjXM/s1600/'
@@ -50,12 +57,9 @@ class _ShortListedPageState extends State<ShortListedPage> {
                       experience: '2 Years',
                       jobTitle: 'Sr.Flutter Developer',
                       button: widgets.textColorButton(
-                          text: 'Assign Task',
-                          onPress: (){}
-                          ),
+                          text: 'Assign Task', onPress: () {}),
                     );
-                  }
-              ),
+                  }),
             ),
           ],
         ),

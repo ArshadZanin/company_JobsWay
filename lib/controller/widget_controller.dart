@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobs_way_company/pages/profile_page.dart';
 
 class WidgetController extends GetxController {
   Widget headingTexts({required String blackText, String colorText = ''}) {
@@ -137,7 +138,14 @@ class WidgetController extends GetxController {
       ),
       actions: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ProfilePage(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.account_circle_outlined,
             )),
@@ -203,11 +211,11 @@ class WidgetController extends GetxController {
                     fontWeight: FontWeight.bold),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white
-                ),
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.white),
                 child: const Text(
                   'see applicants',
                   style: TextStyle(
@@ -481,7 +489,7 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget applicantList({required String name,Function()? onPress}) {
+  Widget applicantList({required String name, required Function() onPress}) {
     return Card(
       color: const Color(0xFFB8E8F2),
       child: ListTile(
@@ -495,29 +503,26 @@ class WidgetController extends GetxController {
         subtitle: const Text('has completed the task'),
         trailing: Column(
           children: [
-            greenButton(
-              label: 'Contact',
-              onPress: onPress
-            ),
+            greenButton(label: 'Contact', onPress: onPress),
           ],
         ),
       ),
     );
   }
 
-  Widget greenButton({Function()? onPress, required String label}){
+  Widget greenButton({required Function() onPress, required String label}) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
           const Color(0xFF03C852),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPress,
       child: Text(label),
     );
   }
 
-  Widget redButton({Function()? onPress, required String label}){
+  Widget redButton({Function()? onPress, required String label}) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
@@ -529,16 +534,15 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget applicationList({
-  required String imageSrc,
-    required String name,
-    required String place,
-    required String email,
-    required String phone,
-    required String experience,
-    required String jobTitle,
-    required Widget button
-}){
+  Widget applicationList(
+      {required String imageSrc,
+      required String name,
+      required String place,
+      required String email,
+      required String phone,
+      required String experience,
+      required String jobTitle,
+      required Widget button}) {
     return Card(
       color: const Color(0xFFE6E6E6),
       child: Padding(
@@ -556,42 +560,29 @@ class WidgetController extends GetxController {
                   ),
                   // child: Image.network(imageSrc,fit: BoxFit.cover,),
                 ),
-                const SizedBox(width: 10,),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: Column(
                     children: [
                       Text(
                         name,
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20
-                        ),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
+                      iconText(icon: Icons.location_on_outlined, text: place),
+                      iconText(icon: Icons.email_outlined, text: email),
+                      iconText(icon: Icons.phone_outlined, text: phone),
                       iconText(
-                        icon: Icons.location_on_outlined,
-                        text: place
-                      ),
+                          icon: Icons.person_pin_outlined, text: 'Portfolio'),
                       iconText(
-                          icon: Icons.email_outlined,
-                          text: email
-                      ),
-                      iconText(
-                          icon: Icons.phone_outlined,
-                          text: phone
-                      ),
-                      iconText(
-                          icon: Icons.person_pin_outlined,
-                          text: 'Portfolio'
-                      ),
-                      iconText(
-                          icon: Icons.text_snippet_outlined ,
-                          text: 'Resume'
-                      ),
+                          icon: Icons.text_snippet_outlined, text: 'Resume'),
                       iconText(
                           icon: Icons.upcoming_outlined,
-                          text: '$experience of Experience'
-                      ),
+                          text: '$experience of Experience'),
                     ],
                   ),
                 ),
@@ -603,18 +594,19 @@ class WidgetController extends GetxController {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                      'Applied For : ',
+                    'Applied For : ',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        ),
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
                   ),
                   Text(
                     jobTitle,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -626,18 +618,44 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget iconText({IconData? icon, String text = ''}){
+  Widget iconText({IconData? icon,
+    String text = '',
+    double textSize = 14.0,
+    double? iconSize,
+  }) {
     return Row(
       children: [
-        Icon(icon,color: Colors.black,),
+        Icon(
+          icon,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        const SizedBox(width: 5,),
         Text(
           text,
-          style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14
-          ),
+          style: TextStyle(color: Colors.black, fontSize: textSize),
         ),
       ],
+    );
+  }
+
+  Widget textWidget({
+    required String text,
+    double size = 20.0,
+    Color color = Colors.black,
+    bool bold = false,
+    EdgeInsetsGeometry padding = const EdgeInsets.all(8.0),
+  }){
+    return Padding(
+      padding: padding,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontWeight: bold == true ? FontWeight.bold : null,
+          fontSize: size
+        ),
+      ),
     );
   }
 
