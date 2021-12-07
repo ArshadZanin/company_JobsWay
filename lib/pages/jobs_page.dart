@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/pages/add_job.dart';
 
 class JobsPage extends StatefulWidget {
   const JobsPage({Key? key}) : super(key: key);
@@ -10,7 +11,6 @@ class JobsPage extends StatefulWidget {
 }
 
 class _JobsPageState extends State<JobsPage> {
-
   final widgets = Get.put(WidgetController());
 
   @override
@@ -24,21 +24,29 @@ class _JobsPageState extends State<JobsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 widgets.headingVersaTexts(colorText: 'Jobs.'),
-                widgets.greenButton(label: 'Add new job',onPress: (){}),
+                widgets.greenButton(
+                    label: 'Add new job',
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AddJobPage(),
+                        ),
+                      );
+                    },),
               ],
             ),
             Expanded(
               child: ListView.builder(
                   itemCount: 50,
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return widgets.jobCardBlack(
-                        postTime: '10 days',
-                        jobName: 'Sr.Flutter Developer',
+                      postTime: '10 days',
+                      jobName: 'Sr.Flutter Developer',
                       salaryRange: '30000 - 50000',
                       experience: '4 - 8 Year',
                     );
-                  }
-              ),
+                  }),
             ),
           ],
         ),
