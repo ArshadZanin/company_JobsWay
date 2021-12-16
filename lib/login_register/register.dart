@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/image_pick/utils.dart';
 import 'package:jobs_way_company/login_register/otp.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -12,6 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final widgets = Get.put(WidgetController());
+  File? image;
 
   ///assign controllers
   final companyNameController = TextEditingController();
@@ -85,16 +90,34 @@ class _RegisterPageState extends State<RegisterPage> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(20),
                       color: Colors.grey),
-                  height: 250,
+                  height: 200,
                   width: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: image == null ?
+                    Container()
+                    : Image.file(image!),
+                  ),
                 ),
+
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    image = (await Utils.pickImage(
+                        cropImage: cropSquareImage,
+                    ))!;
+                    print('*****************************************************************');
+                    var value = await BASE64.encode(image!.bodyBytes);
+                    print(value);
+                    print('*****************************************************************');
+                    setState(() {
+
+                    });
+                  },
                   child: const Text(
                     'Upload Image',
                     style: TextStyle(color: Colors.white),
@@ -179,4 +202,11 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
+  Future<File?> cropSquareImage(File imageFile) async =>
+      await ImageCropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+      );
 }
