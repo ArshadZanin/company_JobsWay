@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/image_pick/utils.dart';
@@ -110,17 +112,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     image = (await Utils.pickImage(
                         cropImage: cropSquareImage,
                     ))!;
-                    print('*****************************************************************');
-                    var value = await BASE64.encode(image!.bodyBytes);
-                    print(value);
-                    print('*****************************************************************');
                     setState(() {
 
                     });
                   },
-                  child: const Text(
+                  child: Text(
                     'Upload Image',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.poppins(color: Colors.white),
                   ),
                 ),
                 const Text('Connect Social Media:'),

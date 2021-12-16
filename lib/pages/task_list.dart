@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 
 class TaskList extends StatelessWidget {
@@ -28,10 +29,10 @@ class TaskList extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: const Color(0xFFF2F2F2),
-        title: const Text(
+        title: Text(
           'Task List.',
-          style: TextStyle(
-            color: Color(0xFF008FAE),
+          style: GoogleFonts.poppins(
+            color: const Color(0xFF008FAE),
           ),
         ),
         elevation: 0,

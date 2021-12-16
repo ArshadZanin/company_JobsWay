@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/pages/profile_page.dart';
 
 class WidgetController extends GetxController {
@@ -10,15 +11,15 @@ class WidgetController extends GetxController {
       children: [
         Text(
           blackText,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         Text(
           colorText,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF008FAE),
+            color: const Color(0xFF008FAE),
           ),
         ),
       ],
@@ -31,15 +32,15 @@ class WidgetController extends GetxController {
       children: [
         Text(
           colorText,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF008FAE),
+            color: const Color(0xFF008FAE),
           ),
         ),
         Text(
           blackText,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ],
@@ -56,7 +57,7 @@ class WidgetController extends GetxController {
       children: [
         Text(
           text,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             color: Colors.black,
           ),
         ),
@@ -64,8 +65,8 @@ class WidgetController extends GetxController {
           onPressed: onPress,
           child: Text(
             buttonText,
-            style: const TextStyle(
-              color: Color(0xff008080),
+            style: GoogleFonts.poppins(
+              color: const Color(0xff008080),
             ),
           ),
         ),
@@ -91,8 +92,8 @@ class WidgetController extends GetxController {
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xffAEAEAE),
+          labelStyle: GoogleFonts.poppins(
+            color: const Color(0xffAEAEAE),
           ),
         ),
       ),
@@ -112,7 +113,7 @@ class WidgetController extends GetxController {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white),
+          style: GoogleFonts.poppins(color: Colors.white),
         ),
       ),
     );
@@ -125,14 +126,14 @@ class WidgetController extends GetxController {
       iconTheme: const IconThemeData(color: Colors.black),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Jobs',
-            style: TextStyle(color: Colors.black),
+            style: GoogleFonts.poppins(color: Colors.black),
           ),
           Text(
             'Way.',
-            style: TextStyle(color: Color(0xFF008FAE)),
+            style: GoogleFonts.poppins(color: const Color(0xFF008FAE)),
           ),
         ],
       ),
@@ -172,21 +173,21 @@ class WidgetController extends GetxController {
             children: [
               Text(
                 jobName,
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
               ),
               Text(
                 '₹$salaryRange',
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                     color: Colors.green,
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
               ),
               Text(
                 '$experience experience',
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                     color: Colors.grey,
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
@@ -198,14 +199,14 @@ class WidgetController extends GetxController {
             children: [
               Text(
                 '$postTime ago',
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
               ),
               Text(
                 jobTime,
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.bold),
@@ -216,9 +217,9 @@ class WidgetController extends GetxController {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Colors.white),
-                child: const Text(
+                child: Text(
                   'see applicants',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.green,
                       fontSize: 12,
                       fontWeight: FontWeight.bold),
@@ -246,7 +247,7 @@ class WidgetController extends GetxController {
           ),
           Text(
             text,
-            style: const TextStyle(color: Color(0xff000000)),
+            style: GoogleFonts.poppins(color: const Color(0xff000000)),
           ), //0xff008080
         ],
       ),
@@ -300,14 +301,14 @@ class WidgetController extends GetxController {
                         children: [
                           Text(
                             companyName,
-                            style: const TextStyle(
+                            style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
                             companyLocation!,
-                            style: const TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.grey,
                               fontSize: 18,
                             ),
@@ -317,23 +318,23 @@ class WidgetController extends GetxController {
                     ],
                   ),
                 ),
-                const Text(
+                Text(
                   'Complete Task',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 35,
                       fontWeight: FontWeight.bold),
                 ),
-                const Text(
+                Text(
                   'Questions\t: 4',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
-                const Text(
+                Text(
                   'Duration\t: 30 min',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
@@ -358,11 +359,11 @@ class WidgetController extends GetxController {
         backgroundColor: MaterialStateProperty.all(const Color(0xFFFFE39C)),
       ),
       onPressed: onPress,
-      child: const Padding(
-        padding: EdgeInsets.all(6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
         child: Text(
           'PENDING',
-          style: TextStyle(color: Color(0xff945900)),
+          style: GoogleFonts.poppins(color: const Color(0xff945900)),
         ),
       ),
     );
@@ -374,11 +375,11 @@ class WidgetController extends GetxController {
         backgroundColor: MaterialStateProperty.all(const Color(0xFF03C852)),
       ),
       onPressed: onPress,
-      child: const Padding(
-        padding: EdgeInsets.all(6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
         child: Text(
           'APPROVED',
-          style: TextStyle(color: Color(0xff435737)),
+          style: GoogleFonts.poppins(color: const Color(0xff435737)),
         ),
       ),
     );
@@ -390,11 +391,11 @@ class WidgetController extends GetxController {
         backgroundColor: MaterialStateProperty.all(const Color(0xFFFF4E4E)),
       ),
       onPressed: onPress,
-      child: const Padding(
-        padding: EdgeInsets.all(6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
         child: Text(
           'REJECTED',
-          style: TextStyle(color: Color(0xff4F3030)),
+          style: GoogleFonts.poppins(color: const Color(0xff4F3030)),
         ),
       ),
     );
@@ -429,14 +430,14 @@ class WidgetController extends GetxController {
         ),
         title: Text(
           jobName,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             color: Colors.white,
             fontSize: 16,
           ),
         ),
         subtitle: Text(
           jobLocation,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             color: Colors.white,
             fontSize: 12,
           ),
@@ -455,7 +456,7 @@ class WidgetController extends GetxController {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 20),
+        style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
       ),
     );
   }
@@ -471,14 +472,14 @@ class WidgetController extends GetxController {
           children: [
             Text(
               '$count',
-              style: const TextStyle(
+              style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               label,
-              style: const TextStyle(
+              style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -495,9 +496,9 @@ class WidgetController extends GetxController {
       child: ListTile(
         title: Text(
           name,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF004756),
+            color: const Color(0xFF004756),
           ),
         ),
         subtitle: const Text('has completed the task'),
@@ -544,7 +545,7 @@ class WidgetController extends GetxController {
       onPressed: onPress,
       child: Text(
         label,
-        style: TextStyle(
+        style: GoogleFonts.poppins(
             color: colorGrey == false ?
             Colors.white :
             Colors.black,
@@ -587,7 +588,7 @@ class WidgetController extends GetxController {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
+                        style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
@@ -612,16 +613,16 @@ class WidgetController extends GetxController {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'Applied For : ',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 20,
                     ),
                   ),
                   Text(
                     jobTitle,
-                    style: const TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -652,7 +653,7 @@ class WidgetController extends GetxController {
         const SizedBox(width: 5,),
         Text(
           text,
-          style: TextStyle(color: Colors.black, fontSize: textSize),
+          style: GoogleFonts.poppins(color: Colors.black, fontSize: textSize),
         ),
       ],
     );
@@ -669,7 +670,7 @@ class WidgetController extends GetxController {
       padding: padding,
       child: Text(
         text,
-        style: TextStyle(
+        style: GoogleFonts.poppins(
           color: color,
           fontWeight: bold == true ? FontWeight.bold : null,
           fontSize: size

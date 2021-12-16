@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -14,9 +15,9 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: const Color(0xFFF2F2F2),
-        title: const Text(
+        title: Text(
           'Profile.',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             color: Color(0xFF008FAE),
           ),
         ),
@@ -87,12 +88,12 @@ class ProfilePage extends StatelessWidget {
                 size: 22,
                 bold: true,
               ),
-              const Text(
+              Text(
                   'In publishing and graphic design, Lorem ipsum is a'
                       ' placeholder text commonly used to demonstrate the '
                       'visual form of a document or a typeface without'
                       ' relying on meaningful content. ',
-                style: TextStyle(fontSize: 20),
+                style: GoogleFonts.poppins(fontSize: 20),
               ),
               const SizedBox(height: 20,),
               widgets.textWidget(
