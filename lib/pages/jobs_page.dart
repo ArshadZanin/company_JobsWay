@@ -36,6 +36,7 @@ class _JobsPageState extends State<JobsPage> {
                     },),
               ],
             ),
+            const SizedBox(height: 10,),
             Expanded(
               child: ListView.builder(
                   itemCount: 50,

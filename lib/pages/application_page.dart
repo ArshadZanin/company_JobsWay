@@ -26,6 +26,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
                 widgets.headingVersaTexts(colorText: 'Applications.'),
               ],
             ),
+            const SizedBox(height: 10,),
             ///application list
             Expanded(
               child: ListView.builder(

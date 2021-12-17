@@ -51,15 +51,19 @@ class _AssignTaskState extends State<AssignTask> {
                 bold: true,
               ),
               widgets.textFieldGrey(
+                label: 'Question 1',
                 textController: setA,
               ),
               widgets.textFieldGrey(
+                label: 'Question 2',
                 textController: setB,
               ),
               widgets.textFieldGrey(
+                label: 'Question 3',
                 textController: setC,
               ),
               widgets.textFieldGrey(
+                label: 'Question 4',
                 textController: setD,
               ),
 

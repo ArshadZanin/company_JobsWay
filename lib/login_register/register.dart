@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey),
+                      color: const Color(0xFFE6E6E6)),
                   height: 200,
                   width: 200,
                   child: ClipRRect(

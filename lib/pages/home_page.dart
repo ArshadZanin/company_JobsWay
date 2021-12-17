@@ -32,16 +32,17 @@ class _HomePageState extends State<HomePage> {
             ShortListedPage(),
           ],
         ),
-        bottomNavigationBar: Material(
-          color: const Color(0xFFF2F2F2),
+        bottomNavigationBar: const Material(
+          color: Color(0xFFF2F2F2),
           child: TabBar(
+            indicatorColor: Colors.transparent,
               unselectedLabelColor: Colors.grey,
-              labelColor: const Color(0xFF008FAE),
+              labelColor: Color(0xFF008FAE),
               tabs: <Widget>[
-                Tab(icon: const Icon(Icons.home,size: 28,), child: Text('Dashboard',style: GoogleFonts.poppins(fontSize: 12),)),
-                Tab(icon: const Icon(Icons.pages,size: 28,), child: Text('Jobs',style: GoogleFonts.poppins(fontSize: 12),)),
-                Tab(icon: const Icon(Icons.article,size: 28,), child: Text('Applications',style: GoogleFonts.poppins(fontSize: 12),)),
-                Tab(icon: const Icon(Icons.list,size: 28,), child: Text('ShortListed',style: GoogleFonts.poppins(fontSize: 12),)),
+                Tab(icon: Icon(Icons.home,size: 28,),),
+                Tab(icon: Icon(Icons.pages,size: 28,),),
+                Tab(icon: Icon(Icons.article,size: 28,),),
+                Tab(icon: Icon(Icons.list,size: 28,),),
               ]),
         ),
       ),

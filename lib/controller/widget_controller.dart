@@ -129,11 +129,11 @@ class WidgetController extends GetxController {
         children: [
           Text(
             'Jobs',
-            style: GoogleFonts.poppins(color: Colors.black),
+            style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold),
           ),
           Text(
             'Way.',
-            style: GoogleFonts.poppins(color: const Color(0xFF008FAE)),
+            style: GoogleFonts.poppins(color: const Color(0xFF008FAE),fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -164,65 +164,89 @@ class WidgetController extends GetxController {
   }) {
     return Card(
       color: const Color(0xFF2C2C2C),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListTile(
-          onTap: onTap,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      child: SizedBox(
+        width: double.infinity,
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                jobName,
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        jobName,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '₹$salaryRange',
+                        style: GoogleFonts.poppins(
+                            color: Colors.green,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '$experience experience',
+                        style: GoogleFonts.poppins(
+                            color: Colors.grey,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                '₹$salaryRange',
-                style: GoogleFonts.poppins(
-                    color: Colors.green,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '$experience experience',
-                style: GoogleFonts.poppins(
-                    color: Colors.grey,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                '$postTime ago',
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                jobTime,
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.white),
-                child: Text(
-                  'see applicants',
-                  style: GoogleFonts.poppins(
-                      color: Colors.green,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      '$postTime ago',
+                      textAlign: TextAlign.right,
+                      style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      jobTime,
+                      textAlign: TextAlign.right,
+                      style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Container(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white),
+                            child: Text(
+                              'see applicants',
+                              style: GoogleFonts.poppins(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -480,7 +504,6 @@ class WidgetController extends GetxController {
             Text(
               label,
               style: GoogleFonts.poppins(
-                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -490,21 +513,63 @@ class WidgetController extends GetxController {
     );
   }
 
+  // Widget applicantList({required String name, required Function() onPress}) {
+  //   return Card(
+  //     color: const Color(0xFFB8E8F2),
+  //     child: ListTile(
+  //       title: Text(
+  //         name,
+  //         style: GoogleFonts.poppins(
+  //           fontWeight: FontWeight.bold,
+  //           color: const Color(0xFF004756),
+  //         ),
+  //       ),
+  //       subtitle: const Text('has completed the task'),
+  //       trailing: Column(
+  //         children: [
+  //           greenButton(label: 'Contact', onPress: onPress),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget applicantList({required String name, required Function() onPress}) {
     return Card(
       color: const Color(0xFFB8E8F2),
-      child: ListTile(
-        title: Text(
-          name,
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF004756),
-          ),
-        ),
-        subtitle: const Text('has completed the task'),
-        trailing: Column(
+      child: SizedBox(
+        width: double.infinity,
+        height: 115,
+        child: Row(
           children: [
-            greenButton(label: 'Contact', onPress: onPress),
+            Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF004756),
+                        ),
+                      ),
+                      const Text('has completed the task'),
+                    ],
+                  ),
+                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  greenButton(label: 'Contact', onPress: onPress),
+                  redButton(label: '  Reject ', onPress: onPress),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -613,19 +678,27 @@ class WidgetController extends GetxController {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Applied For : ',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 20,
+                  Expanded(
+                    flex: 3,
+                    child: Center(
+                      child: Text(
+                        'Applied For : ',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
-                  Text(
-                    jobTitle,
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    flex: 4,
+                    child: Center(
+                      child: Text(
+                        jobTitle,
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -641,7 +714,7 @@ class WidgetController extends GetxController {
   Widget iconText({IconData? icon,
     String text = '',
     double textSize = 14.0,
-    double? iconSize,
+    double iconSize = 14,
   }) {
     return Row(
       children: [
@@ -651,9 +724,16 @@ class WidgetController extends GetxController {
           size: iconSize,
         ),
         const SizedBox(width: 5,),
-        Text(
-          text,
-          style: GoogleFonts.poppins(color: Colors.black, fontSize: textSize),
+        Expanded(
+          child: SizedBox(
+            child: Text(
+              text,
+              overflow: TextOverflow.fade,
+              maxLines: 1,
+              softWrap: false,
+              style: GoogleFonts.poppins(color: Colors.black, fontSize: textSize),
+            ),
+          ),
         ),
       ],
     );
