@@ -75,7 +75,9 @@ class WidgetController extends GetxController {
   }
 
   Widget textFieldGrey(
-      {String label = '', TextEditingController? textController}) {
+      {String label = '',
+      TextEditingController? textController,
+      int maxLines = 1}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -84,6 +86,7 @@ class WidgetController extends GetxController {
         color: const Color(0xFFE6E6E6),
       ),
       child: TextFormField(
+        maxLines: maxLines,
         controller: textController,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -129,11 +132,13 @@ class WidgetController extends GetxController {
         children: [
           Text(
             'Jobs',
-            style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           Text(
             'Way.',
-            style: GoogleFonts.poppins(color: const Color(0xFF008FAE),fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+                color: const Color(0xFF008FAE), fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -230,8 +235,8 @@ class WidgetController extends GetxController {
                         padding: const EdgeInsets.all(10.0),
                         child: Center(
                           child: Container(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 color: Colors.white),
@@ -542,23 +547,23 @@ class WidgetController extends GetxController {
         child: Row(
           children: [
             Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF004756),
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF004756),
                       ),
-                      const Text('has completed the task'),
-                    ],
-                  ),
+                    ),
+                    const Text('has completed the task'),
+                  ],
                 ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -600,20 +605,21 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget blueButton({Function()? onPress, required String label, bool colorGrey = false}) {
+  Widget blueButton(
+      {Function()? onPress, required String label, bool colorGrey = false}) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
-          colorGrey == false ? const Color(0xFF0060A5) : const Color(0xFFE6E6E6),
+          colorGrey == false
+              ? const Color(0xFF0060A5)
+              : const Color(0xFFE6E6E6),
         ),
       ),
       onPressed: onPress,
       child: Text(
         label,
         style: GoogleFonts.poppins(
-            color: colorGrey == false ?
-            Colors.white :
-            Colors.black,
+          color: colorGrey == false ? Colors.white : Colors.black,
         ),
       ),
     );
@@ -711,10 +717,11 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget iconText({IconData? icon,
+  Widget iconText({
+    IconData? icon,
     String text = '',
     double textSize = 14.0,
-    double iconSize = 14,
+    double iconSize = 20,
   }) {
     return Row(
       children: [
@@ -723,7 +730,9 @@ class WidgetController extends GetxController {
           color: Colors.black,
           size: iconSize,
         ),
-        const SizedBox(width: 5,),
+        const SizedBox(
+          width: 5,
+        ),
         Expanded(
           child: SizedBox(
             child: Text(
@@ -731,7 +740,8 @@ class WidgetController extends GetxController {
               overflow: TextOverflow.fade,
               maxLines: 1,
               softWrap: false,
-              style: GoogleFonts.poppins(color: Colors.black, fontSize: textSize),
+              style:
+                  GoogleFonts.poppins(color: Colors.black, fontSize: textSize),
             ),
           ),
         ),
@@ -745,18 +755,16 @@ class WidgetController extends GetxController {
     Color color = Colors.black,
     bool bold = false,
     EdgeInsetsGeometry padding = const EdgeInsets.all(8.0),
-  }){
+  }) {
     return Padding(
       padding: padding,
       child: Text(
         text,
         style: GoogleFonts.poppins(
-          color: color,
-          fontWeight: bold == true ? FontWeight.bold : null,
-          fontSize: size
-        ),
+            color: color,
+            fontWeight: bold == true ? FontWeight.bold : null,
+            fontSize: size),
       ),
     );
   }
-
 }

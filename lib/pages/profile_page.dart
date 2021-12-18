@@ -1,13 +1,50 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+
   final widgets = Get.put(WidgetController());
+  File? image;
+  Uint8List? bytesImage;
+
+  var companyName = '';
+  var industry = '';
+  var location = '';
+  var email = '';
+  var phone = '';
+  var about = '';
+  var website = '';
+  var instagram = '';
+  var facebook = '';
+  var twitter = '';
+  var linkedin = '';
+  var password = '';
+  var confirmPassword = '';
+
+  @override
+  initState() {
+    super.initState();
+    retrieveData().whenComplete(() {
+      setState(() {
+      });
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +55,7 @@ class ProfilePage extends StatelessWidget {
         title: Text(
           'Profile.',
           style: GoogleFonts.poppins(
-            color: Color(0xFF008FAE),
+            color: const Color(0xFF008FAE),
           ),
         ),
         elevation: 0,
@@ -34,17 +71,19 @@ class ProfilePage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  elevation: 5,
+                  elevation: 3,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.all(10),
                     child: SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.network(
-                        'https://img.flaticon.com/icons/png/512/2702/2702602.png?'
-                            'size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF',
-                        fit: BoxFit.cover,
+                      width: 200,
+                      height: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: bytesImage != null ?
+                        Image.memory(
+                          bytesImage!,
+                          fit: BoxFit.cover,
+                        ):Container(),
                       ),
                     ),
                   ),
@@ -52,7 +91,7 @@ class ProfilePage extends StatelessWidget {
               ),
               Center(
                 child: widgets.textWidget(
-                    text: 'Google',
+                    text: companyName,
                   size: 30,
                   bold: true,
                   padding: const EdgeInsets.all(16),
@@ -61,25 +100,25 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 20,),
               widgets.iconText(
                   icon: Icons.corporate_fare_outlined,
-                  text: 'Information Technology',
+                  text: industry,
                 textSize: 20,
               ),
               const SizedBox(height: 20,),
               widgets.iconText(
                   icon: Icons.location_on_outlined,
-                  text: 'Bengaluru, India',
+                  text: location,
                 textSize: 20,
               ),
               const SizedBox(height: 20,),
               widgets.iconText(
                   icon: Icons.mail_outlined,
-                  text: 'google@mail.com',
+                  text: email,
                 textSize: 20,
               ),
               const SizedBox(height: 20,),
               widgets.iconText(
                   icon: Icons.phone_outlined,
-                  text: '21837788290',
+                  text: phone,
                 textSize: 20,
               ),
               const SizedBox(height: 20,),
@@ -89,10 +128,7 @@ class ProfilePage extends StatelessWidget {
                 bold: true,
               ),
               Text(
-                  'In publishing and graphic design, Lorem ipsum is a'
-                      ' placeholder text commonly used to demonstrate the '
-                      'visual form of a document or a typeface without'
-                      ' relying on meaningful content. ',
+                  about,
                 style: GoogleFonts.poppins(fontSize: 20),
               ),
               const SizedBox(height: 20,),
@@ -105,35 +141,35 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   const FaIcon(FontAwesomeIcons.link),
                   const SizedBox(width: 5,),
-                  widgets.textWidget(text: 'www.google.com',bold: true),
+                  widgets.textWidget(text: website,bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.instagram),
                   const SizedBox(width: 5,),
-                  widgets.textWidget(text: 'www.instagram.com/google',bold: true),
+                  widgets.textWidget(text: instagram,bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.facebook),
                   const SizedBox(width: 5,),
-                  widgets.textWidget(text: 'www.facebook.com/google',bold: true),
+                  widgets.textWidget(text: facebook,bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.twitter),
                   const SizedBox(width: 5,),
-                  widgets.textWidget(text: 'www.twitter.com/google',bold: true),
+                  widgets.textWidget(text: twitter,bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.linkedin),
                   const SizedBox(width: 5,),
-                  widgets.textWidget(text: 'www.linkedin.com/google',bold: true),
+                  widgets.textWidget(text: linkedin,bold: true),
                 ],
               ),
 
@@ -142,5 +178,54 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> retrieveData() async{
+    final preferences = await SharedPreferences.getInstance();
+    String? result = preferences.getString("image");
+    bytesImage = base64Decode(result!);
+
+    String? companyNameGet = preferences.getString("companyName");
+    companyName = companyNameGet!;
+
+
+    String? industryGet = preferences.getString("industry");
+    industry = industryGet!;
+
+    String? locationGet = preferences.getString("location");
+    location = locationGet!;
+
+    String? emailGet = preferences.getString("email");
+    email = emailGet!;
+
+    String? phoneGet = preferences.getString("phone");
+    phone = phoneGet!;
+
+    String? aboutGet = preferences.getString("about");
+    about = aboutGet!;
+
+    String? websiteGet = preferences.getString("website");
+    website = websiteGet!;
+
+    String? linkedinGet = preferences.getString("linkedin");
+    linkedin = linkedinGet!;
+
+    String? instagramGet = preferences.getString("instagram");
+    instagram = instagramGet!;
+
+    String? twitterGet = preferences.getString("twitter");
+    twitter = twitterGet!;
+
+    String? facebookGet = preferences.getString("facebook");
+    facebook = facebookGet!;
+
+    String? passwordGet = preferences.getString("password");
+    password = passwordGet!;
+    confirmPassword = passwordGet;
+
+
+    setState(() {
+
+    });
   }
 }
