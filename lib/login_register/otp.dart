@@ -87,12 +87,12 @@ class OtpPage extends StatelessWidget {
                   child: widgets.textColorButton(
                     text: 'Submit',
                     onPress: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => WaitingPage(),
-                        ),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (_) => WaitingPage(name: 'Google',),
+                      //   ),
+                      // );
                     },
                   ),
                 ),

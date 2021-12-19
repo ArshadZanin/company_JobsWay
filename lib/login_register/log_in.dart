@@ -76,7 +76,7 @@ class LogIn extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const RegisterPage(),
+                          builder: (_) => RegisterPage(),
                         ),
                       );
                     },

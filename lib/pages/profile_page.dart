@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
+import 'package:jobs_way_company/login_register/log_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -58,6 +59,16 @@ class _ProfilePageState extends State<ProfilePage> {
             color: const Color(0xFF008FAE),
           ),
         ),
+        actions: [
+          IconButton(onPressed: () async {
+
+            final preferences = await SharedPreferences.getInstance();
+            preferences.clear();
+            
+            Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LogIn(),),);
+          },icon: const Icon(Icons.logout),),
+        ],
         elevation: 0,
       ),
       body: SingleChildScrollView(

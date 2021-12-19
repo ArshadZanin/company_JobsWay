@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobs_way_company/login_register/log_in.dart';
+import 'package:jobs_way_company/pages/check_page.dart';
 
 
 void main() {
@@ -9,6 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: createMaterialColor(const Color(0xFF004756)),
       ),
-      home: LogIn(),
+      home: const CheckPage(),
     );
   }
 
@@ -40,5 +42,4 @@ class MyApp extends StatelessWidget {
     }
     return MaterialColor(color.value, swatch);
   }
-
 }

@@ -7,12 +7,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/image_pick/utils.dart';
-import 'package:jobs_way_company/login_register/otp.dart';
+import 'package:jobs_way_company/model/register_model.dart';
+import 'package:jobs_way_company/pages/waiting_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({String this.reRegister = '', Key? key}) : super(key: key);
+  String? reRegister;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -53,18 +57,91 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  Future<Registered?> registerCompany({
+    required String companyName,
+    required String industry,
+    required String email,
+    required String location,
+    required String phone,
+    required String bio,
+    required String website,
+    required String linkedin,
+    required String facebook,
+    required String twitter,
+    required String instagram,
+    required String password,
+    required String image,
+    required String imageExtension,
+  }) async {
+    final jsonMap = {
+      "companyDetails": {
+        "companyName": companyName,
+        "industry": industry,
+        "email": email,
+        "location": location,
+        "phone": phone,
+        "bio": bio,
+        "website": website,
+        "linkedIn": linkedin,
+        "facebook": facebook,
+        "twitter": twitter,
+        "instagram": instagram,
+        "password": password
+      },
+      "image": """data:image/$imageExtension;base64,$image"""
+    };
+    // var jsonMap = {
+    //   "email": "peter@klaven",
+    //   "password": "cityslicka"
+    // };
+
+    String jsonData = jsonEncode(jsonMap);
+    print(jsonData);
+
+    String apiUrl;
+
+    if(widget.reRegister == ''){
+      apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/register';
+    }else{
+      apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/reregister';
+    }
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      body: jsonData,
+      headers: {"Content-Type": "application/json"},
+    );
+
+
+    print('StatusCode: ${response.statusCode}');
+
+    if(response.statusCode == 200){
+      final String responseString = response.body;
+      print(responseString);
+
+      return registeredFromJson(responseString);
+    }else{
+      // return null;
+    }
+
+  }
+
 
   @override
   initState() {
     super.initState();
     retrieveData().whenComplete(() async {
-      Directory tempDir = await getTemporaryDirectory();
-      var tempPath = tempDir.path;
-      // await File('$tempPath/profile.png').delete();
-      File file = File('$tempPath/profile.png');
-      await file.writeAsBytes(bytesImage!.buffer
-          .asUint8List(bytesImage!.offsetInBytes, bytesImage!.lengthInBytes));
-      image = file;
+
+      if(bytesImage != null){
+        Directory tempDir = await getTemporaryDirectory();
+        var tempPath = tempDir.path;
+        // await File('$tempPath/profile.png').delete();
+        File file = File('$tempPath/profile.png');
+        await file.writeAsBytes(bytesImage!.buffer
+            .asUint8List(bytesImage!.offsetInBytes, bytesImage!.lengthInBytes));
+        image = file;
+      }
+
 
 
       companyNameController.text = companyName;
@@ -239,8 +316,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.all(18.0),
                   child: widgets.textColorButton(
                     text: 'Register Your Company',
-                    onPress: () {
-                      var value = base64Encode(image!.readAsBytesSync());
+                    onPress: () async {
+
+                      var extension = path.extension(image!.path);
+                      print(extension);
+
+                      String fileExtension = image!.path.split('/').last.split('.').last;
+                      print(fileExtension);
+
+
+                      final bytes = await image!.readAsBytes();
+                      var value = base64.encode(bytes);
+                      print(value.length);
 
                       companyName = companyNameController.text;
                       industry = industryController.text;
@@ -280,42 +367,57 @@ class _RegisterPageState extends State<RegisterPage> {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('phone minimum length 5'),
                         ));
-                      }else if(about.length <= 14){
+                      }else if(about.length <= 19){
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('about minimum length 15'),
-                        ));
-                      }else if(website.length <= 14){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('website minimum length 5'),
-                        ));
-                      }else if(instagram.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('instagram link minimum length 5'),
-                        ));
-                      }else if(twitter.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('twitter link minimum length 5'),
-                        ));
-                      }else if(linkedin.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('linkedin link minimum length 5'),
+                          content: Text('about minimum length 20'),
                         ));
                       }else if(password.length <= 8){
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('the password minimum length 8'),
                         ));
-                      }else if(password == confirmPassword){
+                      }else if(password != confirmPassword){
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('the password and confirm password are different'),
                         ));
                       }else{
-                        initializePreference(image: value);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => OtpEmail(),
-                          ),
-                        );
+
+                        var result = await registerCompany(
+                            companyName: companyName,
+                            industry: industry,
+                            email: email,
+                            location: location,
+                            phone: phone,
+                            bio: about,
+                            website: website,
+                            linkedin: linkedin,
+                            facebook: facebook,
+                            twitter: twitter,
+                            instagram: instagram,
+                            password: password,
+                            image: value,
+                            imageExtension: fileExtension);
+
+
+
+
+                        if(result!.company!.id != null){
+                          initializePreference(
+                              image: value,
+                              id: result.company!.id!,
+                          );
+
+                          if(result.company!.status == false){
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => WaitingPage(
+                                  name: companyName,
+                                  id: result.company!.id!,
+                                ),
+                              ),
+                            );
+                          }
+                        }
                       }
                     },
                   ),
@@ -330,9 +432,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> initializePreference({
     required String image,
+    required String id,
   }) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString("image", image);
+    await preferences.setString("id", id);
     await preferences.setString("companyName", companyName);
     await preferences.setString("industry", industry);
     await preferences.setString("location", location);
@@ -350,45 +454,47 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> retrieveData() async{
     final preferences = await SharedPreferences.getInstance();
     String? result = preferences.getString("image");
-    bytesImage = base64Decode(result!);
+    if(result != null){
+      bytesImage = base64Decode(result);
+    }
 
     String? companyNameGet = preferences.getString("companyName");
-    companyName = companyNameGet!;
+    companyName = companyNameGet ?? '';
 
 
     String? industryGet = preferences.getString("industry");
-    industry = industryGet!;
+    industry = industryGet ?? '';
 
     String? locationGet = preferences.getString("location");
-    location = locationGet!;
+    location = locationGet ?? '';
 
     String? emailGet = preferences.getString("email");
-    email = emailGet!;
+    email = emailGet ?? '';
 
     String? phoneGet = preferences.getString("phone");
-    phone = phoneGet!;
+    phone = phoneGet ?? '';
 
     String? aboutGet = preferences.getString("about");
-    about = aboutGet!;
+    about = aboutGet ?? '';
 
     String? websiteGet = preferences.getString("website");
-    website = websiteGet!;
+    website = websiteGet ?? '';
 
     String? linkedinGet = preferences.getString("linkedin");
-    linkedin = linkedinGet!;
+    linkedin = linkedinGet ?? '';
 
     String? instagramGet = preferences.getString("instagram");
-    instagram = instagramGet!;
+    instagram = instagramGet ?? '';
 
     String? twitterGet = preferences.getString("twitter");
-    twitter = twitterGet!;
+    twitter = twitterGet ?? '';
 
     String? facebookGet = preferences.getString("facebook");
-    facebook = facebookGet!;
+    facebook = facebookGet ?? '';
 
     String? passwordGet = preferences.getString("password");
-    password = passwordGet!;
-    confirmPassword = passwordGet;
+    password = passwordGet ?? '';
+    // confirmPassword = passwordGet;
 
 
     setState(() {
