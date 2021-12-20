@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             final preferences = await SharedPreferences.getInstance();
             preferences.clear();
-            
+
             Navigator.pop(context);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LogIn(),),);
           },icon: const Icon(Icons.logout),),
