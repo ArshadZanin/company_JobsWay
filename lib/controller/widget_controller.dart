@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/pages/profile_page.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class WidgetController extends GetxController {
   Widget headingTexts({required String blackText, String colorText = ''}) {
@@ -103,6 +104,59 @@ class WidgetController extends GetxController {
     );
   }
 
+  Widget textFieldGreyObscure({
+    String label = '',
+    TextEditingController? textController,
+    bool readOnly = false,
+    int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
+    required bool obscure,
+    required Function() onPress,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFFE6E6E6),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              obscureText: obscure,
+              keyboardType: keyboardType,
+              readOnly: readOnly,
+              controller: textController,
+              maxLines: maxLines,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                labelText: label,
+                labelStyle: GoogleFonts.poppins(
+                  color: const Color(0xffAEAEAE),
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: IconButton(
+              onPressed: onPress,
+              icon: Icon(
+                obscure ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget textColorButton({
     required String text,
     required Function() onPress,
@@ -115,6 +169,31 @@ class WidgetController extends GetxController {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
+          text,
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget textColorButtonCircle({
+    required String text,
+    required Function() onPress,
+    required bool isLoading,
+  }) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(const Color(0xFF008FAE)),
+      ),
+      onPressed: onPress,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: isLoading ?
+        const SizedBox(
+          height: 25,
+            width: 25,
+            child: CircularProgressIndicator(color: Colors.white,strokeWidth: 1,),) :
+        Text(
           text,
           style: GoogleFonts.poppins(color: Colors.white),
         ),
@@ -764,6 +843,44 @@ class WidgetController extends GetxController {
             color: color,
             fontWeight: bold == true ? FontWeight.bold : null,
             fontSize: size),
+      ),
+    );
+  }
+
+  Widget otpField({void Function(String)? onCompleted, BuildContext? context}) {
+    final otpController = TextEditingController();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 28.0),
+      child: PinCodeTextField(
+        keyboardType: TextInputType.number,
+        length: 6,
+        obscureText: false,
+        animationType: AnimationType.fade,
+        pinTheme: PinTheme(
+          inactiveFillColor: Colors.white,
+          inactiveColor: const Color(0xFF008FAE),
+          activeColor: const Color(0xFF008FAE),
+          selectedFillColor: Colors.white,
+          selectedColor: Colors.black,
+          shape: PinCodeFieldShape.box,
+          borderRadius: BorderRadius.circular(5),
+          fieldHeight: 50,
+          fieldWidth: 40,
+          activeFillColor: Colors.white,
+        ),
+        animationDuration: const Duration(milliseconds: 300),
+        enableActiveFill: true,
+        // errorAnimationController: errorController,
+        controller: otpController,
+        onCompleted: onCompleted,
+        onChanged: (value) {
+          print(value);
+        },
+        beforeTextPaste: (text) {
+          print("Allowing to paste $text");
+          return true;
+        },
+        appContext: context!,
       ),
     );
   }

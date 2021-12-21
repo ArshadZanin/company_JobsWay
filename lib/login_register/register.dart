@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -12,7 +13,6 @@ import 'package:jobs_way_company/pages/waiting_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({String this.reRegister = '', Key? key}) : super(key: key);
@@ -27,6 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   File? image;
   Uint8List? bytesImage;
   bool confirm = false;
+  bool _isLoading = false;
 
   var companyName = '';
   var industry = '';
@@ -57,6 +58,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  bool _isObscurePassword = true;
+  bool _isObscureCPassword = true;
+
   Future<Registered?> registerCompany({
     required String companyName,
     required String industry,
@@ -73,66 +77,87 @@ class _RegisterPageState extends State<RegisterPage> {
     required String image,
     required String imageExtension,
   }) async {
-    final jsonMap = {
-      "companyDetails": {
-        "companyName": companyName,
-        "industry": industry,
-        "email": email,
-        "location": location,
-        "phone": phone,
-        "bio": bio,
-        "website": website,
-        "linkedIn": linkedin,
-        "facebook": facebook,
-        "twitter": twitter,
-        "instagram": instagram,
-        "password": password
-      },
-      "image": """data:image/$imageExtension;base64,$image"""
-    };
-    // var jsonMap = {
-    //   "email": "peter@klaven",
-    //   "password": "cityslicka"
-    // };
+    try {
+      final jsonMap = {
+        "companyDetails": {
+          "companyName": companyName,
+          "industry": industry,
+          "email": email,
+          "location": location,
+          "phone": phone,
+          "bio": bio,
+          "website": website,
+          "linkedIn": linkedin,
+          "facebook": facebook,
+          "twitter": twitter,
+          "instagram": instagram,
+          "password": password
+        },
+        "image": """data:image/$imageExtension;base64,$image"""
+      };
 
-    String jsonData = jsonEncode(jsonMap);
-    print(jsonData);
+      String jsonData = jsonEncode(jsonMap);
 
-    String apiUrl;
+      String apiUrl;
 
-    if(widget.reRegister == ''){
-      apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/register';
-    }else{
-      apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/reregister';
+      if (widget.reRegister == '') {
+        apiUrl =
+            'https://jobsway-company.herokuapp.com/api/v1/company/register';
+      } else {
+        apiUrl =
+            'https://jobsway-company.herokuapp.com/api/v1/company/reregister';
+      }
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonData,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+        return registeredFromJson(responseString);
+      } else {
+        final result = jsonDecode(response.body);
+        if (result['error'] != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              '${result['error']}',
+              textAlign: TextAlign.center,
+            ),
+          ));
+        }
+        return null;
+      }
+    } on SocketException {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          'Check network connection',
+          textAlign: TextAlign.center,
+        ),
+      ));
+    } on TimeoutException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
+      ));
+    } on Error catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
+      ));
     }
-
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      body: jsonData,
-      headers: {"Content-Type": "application/json"},
-    );
-
-
-    print('StatusCode: ${response.statusCode}');
-
-    if(response.statusCode == 200){
-      final String responseString = response.body;
-      print(responseString);
-
-      return registeredFromJson(responseString);
-    }else{
-      // return null;
-    }
-
   }
-
 
   @override
   initState() {
     super.initState();
     retrieveData().whenComplete(() async {
-
-      if(bytesImage != null){
+      if (bytesImage != null) {
         Directory tempDir = await getTemporaryDirectory();
         var tempPath = tempDir.path;
         // await File('$tempPath/profile.png').delete();
@@ -141,8 +166,6 @@ class _RegisterPageState extends State<RegisterPage> {
             .asUint8List(bytesImage!.offsetInBytes, bytesImage!.lengthInBytes));
         image = file;
       }
-
-
 
       companyNameController.text = companyName;
       industryController.text = industry;
@@ -223,23 +246,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: image == null ?
-                    Container()
-                    : Image.file(image!),
+                    child: image == null ? Container() : Image.file(image!),
                   ),
                 ),
-
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black),
                   ),
                   onPressed: () async {
                     image = (await Utils.pickImage(
-                        cropImage: cropSquareImage,
+                      cropImage: cropSquareImage,
                     ))!;
-                    setState(() {
-
-                    });
+                    setState(() {});
                   },
                   child: Text(
                     'Upload Image',
@@ -282,25 +300,43 @@ class _RegisterPageState extends State<RegisterPage> {
                 widgets.textFieldGrey(
                     label: 'LinkedIn', textController: linkedinController),
                 const Text('Create Password :'),
-                widgets.textFieldGrey(
-                    label: 'Password', textController: passwordController),
-                widgets.textFieldGrey(
-                    label: 'Confirm Password',
-                    textController: confirmPasswordController),
+                widgets.textFieldGreyObscure(
+                  label: 'Password',
+                  textController: passwordController,
+                  onPress: () {
+                    _isObscurePassword
+                        ? _isObscurePassword = false
+                        : _isObscurePassword = true;
+                    setState(() {});
+                  },
+                  obscure: _isObscurePassword,
+                ),
+                widgets.textFieldGreyObscure(
+                  label: 'Confirm Password',
+                  textController: confirmPasswordController,
+                  onPress: () {
+                    _isObscureCPassword
+                        ? _isObscureCPassword = false
+                        : _isObscureCPassword = true;
+                    setState(() {});
+                  },
+                  obscure: _isObscureCPassword,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
                       Expanded(
                         child: IconButton(
-                          onPressed: (){
-                            confirm == false ? confirm = true : confirm = false;
-                            setState(() {});
-                          },
-                          icon: confirm == true ?
-                          const Icon(Icons.check_box_outlined) :
-                          const Icon(Icons.check_box_outline_blank)
-                        ),
+                            onPressed: () {
+                              confirm == false
+                                  ? confirm = true
+                                  : confirm = false;
+                              setState(() {});
+                            },
+                            icon: confirm == true
+                                ? const Icon(Icons.check_box_outlined)
+                                : const Icon(Icons.check_box_outline_blank)),
                       ),
                       const Expanded(
                         flex: 5,
@@ -314,20 +350,31 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
-                  child: widgets.textColorButton(
+                  child: widgets.textColorButtonCircle(
                     text: 'Register Your Company',
                     onPress: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
 
-                      var extension = path.extension(image!.path);
-                      print(extension);
+                      _isLoading = true;
 
-                      String fileExtension = image!.path.split('/').last.split('.').last;
-                      print(fileExtension);
+                      setState(() {});
 
+                      if (image == null) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'Add Image',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        return;
+                      }
+
+                      String fileExtension =
+                          image!.path.split('/').last.split('.').last;
 
                       final bytes = await image!.readAsBytes();
                       var value = base64.encode(bytes);
-                      print(value.length);
 
                       companyName = companyNameController.text;
                       industry = industryController.text;
@@ -343,44 +390,99 @@ class _RegisterPageState extends State<RegisterPage> {
                       confirmPassword = confirmPasswordController.text;
                       website = websiteController.text;
 
-                      if(confirm == false){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('verification not ticked'),
-                        ));
-                      }else if(companyName.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('company name minimum length 5'),
-                        ));
-                      }else if(industry.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('industry minimum length 5'),
-                        ));
-                      }else if(location.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('location minimum length 5'),
-                        ));
-                      }else if(email.length <= 5){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('email minimum length 5'),
-                        ));
-                      }else if(phone.length < 10){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('phone minimum length 5'),
-                        ));
-                      }else if(about.length <= 19){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('about minimum length 20'),
-                        ));
-                      }else if(password.length <= 8){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('the password minimum length 8'),
-                        ));
-                      }else if(password != confirmPassword){
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('the password and confirm password are different'),
-                        ));
-                      }else{
+                      List<String> aboutList = about.split(' ');
 
+                      if (confirm == false) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'verification not ticked',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (companyName.length <= 5) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'company name minimum length 5',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (industry.length <= 5) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'industry minimum length 5',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (location.length <= 5) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'location minimum length 5',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (email.length <= 5) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'email minimum length 5',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (phone.length == 10) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'phone minimum length 5',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (aboutList.length <= 20) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'about minimum length 20',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (password.length <= 8) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'the password minimum length 8',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else if (password != confirmPassword) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'the password and confirm password are different',
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
+                        _isLoading = false;
+                        setState(() {});
+                      } else {
                         var result = await registerCompany(
                             companyName: companyName,
                             industry: industry,
@@ -397,16 +499,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             image: value,
                             imageExtension: fileExtension);
 
-
-
-
-                        if(result!.company!.id != null){
+                        if (result == null) {
+                          _isLoading = false;
+                        } else if (result.company!.id != null) {
                           initializePreference(
-                              image: value,
-                              id: result.company!.id!,
+                            image: value,
+                            id: result.company!.id!,
                           );
 
-                          if(result.company!.status == false){
+                          if (result.company!.status == false) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -420,6 +521,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       }
                     },
+                    isLoading: _isLoading,
                   ),
                 ),
               ],
@@ -451,16 +553,15 @@ class _RegisterPageState extends State<RegisterPage> {
     await preferences.setString("password", password);
   }
 
-  Future<void> retrieveData() async{
+  Future<void> retrieveData() async {
     final preferences = await SharedPreferences.getInstance();
     String? result = preferences.getString("image");
-    if(result != null){
+    if (result != null) {
       bytesImage = base64Decode(result);
     }
 
     String? companyNameGet = preferences.getString("companyName");
     companyName = companyNameGet ?? '';
-
 
     String? industryGet = preferences.getString("industry");
     industry = industryGet ?? '';
@@ -496,10 +597,7 @@ class _RegisterPageState extends State<RegisterPage> {
     password = passwordGet ?? '';
     // confirmPassword = passwordGet;
 
-
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Future<File?> cropSquareImage(File imageFile) async =>

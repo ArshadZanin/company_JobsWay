@@ -8,6 +8,7 @@ import 'package:jobs_way_company/login_register/register.dart';
 import 'package:jobs_way_company/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@immutable
 class RejectionPage extends StatefulWidget {
   RejectionPage({
     Key? key,

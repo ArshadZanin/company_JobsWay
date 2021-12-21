@@ -36,7 +36,7 @@ class _CheckPageState extends State<CheckPage> {
           context,
           MaterialPageRoute(
             builder: (_) => id == ''
-                ? LogIn()
+                ? const LogIn()
                 : WaitingPage(
                     name: companyName,
                     id: id,

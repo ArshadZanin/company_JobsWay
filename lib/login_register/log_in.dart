@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
@@ -8,11 +8,10 @@ import 'package:jobs_way_company/login_register/register.dart';
 import 'package:jobs_way_company/model/login_model.dart';
 import 'package:jobs_way_company/pages/home_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
-  LogIn({Key? key}) : super(key: key);
+  const LogIn({Key? key}) : super(key: key);
 
   @override
   State<LogIn> createState() => _LogInState();
@@ -23,6 +22,8 @@ class _LogInState extends State<LogIn> {
   final widgets = Get.put(WidgetController());
   final emailOrUserNameController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _isObscurePassword = true;
+  bool _isLoading = false;
 
 
   Future<Login?> loginCompany({
@@ -30,21 +31,40 @@ class _LogInState extends State<LogIn> {
     required String email,
   }) async {
     const String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/login';
-    final response = await http.post(Uri.parse(apiUrl), body:{
-      "email": email,
-      "password": password,
-    });
 
-    if(response.statusCode == 200){
-      final String responseString = response.body;
 
-      print(response.body);
+    try{
+      final response = await http.post(Uri.parse(apiUrl), body: {
+        "email": email,
+        "password": password,
+      });
 
-      return loginFromJson(responseString);
-    }else{
-      return null;
+      if (response.statusCode == 200) {
+        final String responseString = response.body;
+
+        return loginFromJson(responseString);
+      } else {
+        final result = jsonDecode(response.body);
+        if (result['error'] != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('${result['error']}',textAlign: TextAlign.center,),
+          ));
+        }
+        return null;
+      }
+    }on SocketException {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Check network connection',textAlign: TextAlign.center,),
+      ));
+    } on TimeoutException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('$e',textAlign: TextAlign.center,),
+      ));
+    } on Error catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('$e',textAlign: TextAlign.center,),
+      ));
     }
-
   }
 
   @override
@@ -71,68 +91,113 @@ class _LogInState extends State<LogIn> {
                   const SizedBox(
                     height: 10,
                   ),
-                  widgets.textFieldGrey(
+                  widgets.textFieldGreyObscure(
                     label: 'Password',
                     textController: passwordController,
+                    onPress: () {
+                      _isObscurePassword ?
+                      _isObscurePassword = false :
+                      _isObscurePassword = true;
+                      setState(() {
+
+                      });
+                    }, obscure: _isObscurePassword,
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            debugPrint("Forgot Password");
-                          },
-                          child: const Text('Forgot Password'))
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     TextButton(
+                  //         onPressed: () {
+                  //           debugPrint("Forgot Password");
+                  //         },
+                  //         child: const Text('Forgot Password'))
+                  //   ],
+                  // ),
                   const SizedBox(
                     height: 15,
                   ),
-                  widgets.textColorButton(
+                  widgets.textColorButtonCircle(
                       text: 'Sign In',
                       onPress: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
+
+                        _isLoading = true;
+
+                        setState(() {
+
+                        });
 
                         var email = emailOrUserNameController.text;
                         var password = passwordController.text;
 
-                        var result = await loginCompany(email: email, password: password);
+                        if(email.length <= 5){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('invalid email',textAlign: TextAlign.center,),
+                          ));
+                          _isLoading = false;
+                          setState(() {
 
-                        if(result!.token != null && result.company != null){
+                          });
+                        }else if(password.length <= 8){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('password is not correct',textAlign: TextAlign.center,),
+                          ));
+                          _isLoading = false;
+                          setState(() {
 
-                          var value = result.company;
-
-                          final response = await http.get(Uri.parse(value!.logoUrl!));
-                          var valueByte = base64.encode(response.bodyBytes);
-
-                          await initializePreference(
-                              image: valueByte,
-                              id: value.id!,
-                              companyName: value.companyName!,
-                              industry: value.industry!,
-                              location: value.location!,
-                              email: value.email!,
-                              phone: value.phone!,
-                              about: value.bio!,
-                              website: value.website!,
-                              instagram: value.instagram!,
-                              linkedin: value.linkedIn!,
-                              twitter: value.twitter!,
-                              facebook: value.facebook!,
-                              password: value.password!);
+                          });
+                        }else{
 
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomePage(),
-                            ),
-                          );
+                          var result = await loginCompany(email: email, password: password);
+
+                          if(result == null){
+                            _isLoading = false;
+                            setState(() {
+
+                            });
+                          }else if(result.token != null && result.company != null){
+
+                            var value = result.company;
+
+                            final response = await http.get(Uri.parse(value!.logoUrl!));
+                            var valueByte = base64.encode(response.bodyBytes);
+
+                            await initializePreference(
+                                image: valueByte,
+                                id: value.id!,
+                                companyName: value.companyName!,
+                                industry: value.industry!,
+                                location: value.location!,
+                                email: value.email!,
+                                phone: value.phone!,
+                                about: value.bio!,
+                                website: value.website!,
+                                instagram: value.instagram!,
+                                linkedin: value.linkedIn!,
+                                twitter: value.twitter!,
+                                facebook: value.facebook!,
+                                password: value.password!);
+
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const HomePage(),
+                              ),
+                            );
+                          }else{
+                            _isLoading = false;
+                            setState(() {
+
+                            });
+                          }
                         }
 
-                      }),
+                      }, isLoading: _isLoading),
                   const SizedBox(
                     height: 15,
                   ),

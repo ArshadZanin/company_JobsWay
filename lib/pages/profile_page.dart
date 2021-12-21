@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
             preferences.clear();
 
             Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LogIn(),),);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LogIn(),),);
           },icon: const Icon(Icons.logout),),
         ],
         elevation: 0,
