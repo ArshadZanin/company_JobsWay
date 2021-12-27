@@ -4,21 +4,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
-import 'package:jobs_way_company/login_register/hr_login.dart';
+import 'package:jobs_way_company/login_register/log_in.dart';
 import 'package:jobs_way_company/login_register/register.dart';
+import 'package:jobs_way_company/model/hr_login_model.dart';
 import 'package:jobs_way_company/model/login_model.dart';
 import 'package:jobs_way_company/pages/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LogIn extends StatefulWidget {
-  const LogIn({Key? key}) : super(key: key);
+class HrLogin extends StatefulWidget {
+  const HrLogin({Key? key}) : super(key: key);
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<HrLogin> createState() => _HrLoginState();
 }
 
-class _LogInState extends State<LogIn> {
+class _HrLoginState extends State<HrLogin> {
 
   final widgets = Get.put(WidgetController());
   final emailOrUserNameController = TextEditingController();
@@ -27,11 +28,11 @@ class _LogInState extends State<LogIn> {
   bool _isLoading = false;
 
 
-  Future<Login?> loginCompany({
+  Future<HrLoginModel?> loginCompanyHr({
     required String password,
     required String email,
   }) async {
-    const String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/login';
+    const String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/login/hr';
 
 
     try{
@@ -40,10 +41,11 @@ class _LogInState extends State<LogIn> {
         "password": password,
       });
 
+      print(response.body);
       if (response.statusCode == 200) {
         final String responseString = response.body;
 
-        return loginFromJson(responseString);
+        return hrLoginFromJson(responseString);
       } else {
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
@@ -81,7 +83,7 @@ class _LogInState extends State<LogIn> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   widgets.headingTexts(
-                      blackText: 'Log into ', colorText: 'Company.'),
+                      blackText: 'Log into ', colorText: 'HR Company.'),
                   const SizedBox(
                     height: 50,
                   ),
@@ -142,7 +144,7 @@ class _LogInState extends State<LogIn> {
                           setState(() {
 
                           });
-                        }else if(password.length <= 8){
+                        }else if(password.length < 8){
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text('password is not correct',textAlign: TextAlign.center,),
                           ));
@@ -153,34 +155,27 @@ class _LogInState extends State<LogIn> {
                         }else{
 
 
-                          var result = await loginCompany(email: email, password: password);
+                          var result = await loginCompanyHr(email: email, password: password);
 
                           if(result == null){
                             _isLoading = false;
                             setState(() {
 
                             });
-                          }else if(result.token != null && result.company != null){
+                          }else if(result.token != null && result.hrDetails != null){
 
-                            var value = result.company;
 
-                            final response = await http.get(Uri.parse(value!.logoUrl!));
-                            var valueByte = base64.encode(response.bodyBytes);
 
+
+                            var value = result.hrDetails;
+                            //
+                            // final response = await http.get(Uri.parse(value!.logoUrl!));
+                            // var valueByte = base64.encode(response.bodyBytes);
+                            //
                             await initializePreference(
-                                image: valueByte,
-                                id: value.id!,
-                                companyName: value.companyName!,
-                                industry: value.industry!,
-                                location: value.location!,
-                                email: value.email!,
-                                phone: value.phone!,
-                                about: value.bio!,
-                                website: value.website!,
-                                instagram: value.instagram!,
-                                linkedin: value.linkedIn!,
-                                twitter: value.twitter!,
-                                facebook: value.facebook!,
+                            //     image: valueByte,
+                                id: value!.companyId!,
+                                hrId: value.id!,
                                 password: value.password!);
 
 
@@ -203,27 +198,14 @@ class _LogInState extends State<LogIn> {
                     height: 15,
                   ),
                   widgets.buttonWithText(
-                    text: "Company not Registered?",
-                    buttonText: "Register Now",
+                    text: "Login as Company?",
+                    buttonText: "Login Now",
                     onPress: () {
                       debugPrint("Register Now");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => RegisterPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  widgets.buttonWithText(
-                    text: "Are a HR of Company?",
-                    buttonText: "Hr Login",
-                    onPress: () {
-                      debugPrint("HR Login");
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const HrLogin(),
+                          builder: (_) => const LogIn(),
                         ),
                       );
                     },
@@ -238,37 +220,15 @@ class _LogInState extends State<LogIn> {
   }
 
   Future<void> initializePreference({
-    required String image,
     required String id,
-    required String companyName,
-    required String industry,
-    required String location,
-    required String email,
-    required String phone,
-    required String about,
-    required String website,
-    required String instagram,
-    required String linkedin,
-    required String twitter,
-    required String facebook,
+    required String hrId,
     required String password,
   }) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString("login", 'login');
-    await preferences.setString("image", image);
     await preferences.setString("id", id);
-    await preferences.setString("companyName", companyName);
-    await preferences.setString("industry", industry);
-    await preferences.setString("location", location);
-    await preferences.setString("email", email);
-    await preferences.setString("phone", phone);
-    await preferences.setString("about", about);
-    await preferences.setString("website", website);
-    await preferences.setString("instagram", instagram);
-    await preferences.setString("linkedin", linkedin);
-    await preferences.setString("twitter", twitter);
-    await preferences.setString("facebook", facebook);
-    await preferences.setString("password", password);
+    await preferences.setString("hrId", hrId);
+    await preferences.setString("HrPassword", password);
   }
 
 }

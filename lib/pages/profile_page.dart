@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/login_register/log_in.dart';
+import 'package:jobs_way_company/pages/hr_page/add_hr_page.dart';
+import 'package:jobs_way_company/pages/hr_page/hr_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -60,6 +62,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const HrPage(),),);
+            },
+            icon: const Icon(Icons.person_add_alt),),
           IconButton(onPressed: () async {
 
             final preferences = await SharedPreferences.getInstance();

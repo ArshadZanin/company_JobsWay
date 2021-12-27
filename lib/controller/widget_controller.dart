@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/pages/profile_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:adaptive/adaptive.dart';
 
 class WidgetController extends GetxController {
   Widget headingTexts({required String blackText, String colorText = ''}) {
@@ -192,7 +193,7 @@ class WidgetController extends GetxController {
         const SizedBox(
           height: 25,
             width: 25,
-            child: CircularProgressIndicator(color: Colors.white,strokeWidth: 1,),) :
+            child: CircularProgressIndicator.adaptive(strokeWidth: 1,),) :
         Text(
           text,
           style: GoogleFonts.poppins(color: Colors.white),
