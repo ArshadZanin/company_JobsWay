@@ -8,7 +8,7 @@ import 'package:jobs_way_company/login_register/log_in.dart';
 import 'package:jobs_way_company/login_register/register.dart';
 import 'package:jobs_way_company/model/hr_login_model.dart';
 import 'package:jobs_way_company/model/login_model.dart';
-import 'package:jobs_way_company/pages/home_page.dart';
+import 'package:jobs_way_company/pages/home_pages/home_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

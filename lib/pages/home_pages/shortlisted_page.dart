@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
-import 'package:jobs_way_company/pages/assign_task.dart';
-import 'package:jobs_way_company/pages/task_list.dart';
+import 'package:jobs_way_company/pages/other_pages/assign_task.dart';
+import 'package:jobs_way_company/pages/other_pages/task_list.dart';
 
 class ShortListedPage extends StatefulWidget {
   const ShortListedPage({Key? key}) : super(key: key);

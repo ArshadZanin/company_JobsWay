@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobs_way_company/login_register/log_in.dart';
-import 'package:jobs_way_company/pages/check_page.dart';
+import 'package:jobs_way_company/pages/other_pages/check_page.dart';
 
 
 void main() {

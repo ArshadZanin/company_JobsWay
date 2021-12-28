@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_way_company/login_register/register.dart';
-import 'package:jobs_way_company/pages/home_page.dart';
+import 'package:jobs_way_company/pages/home_pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @immutable

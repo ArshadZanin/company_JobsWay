@@ -9,7 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/image_pick/utils.dart';
 import 'package:jobs_way_company/model/register_model.dart';
-import 'package:jobs_way_company/pages/waiting_page.dart';
+import 'package:jobs_way_company/login_register/waiting_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

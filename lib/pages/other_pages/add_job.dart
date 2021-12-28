@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
-import 'package:jobs_way_company/pages/choose_plan_page.dart';
+import 'package:jobs_way_company/pages/other_pages/choose_plan_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

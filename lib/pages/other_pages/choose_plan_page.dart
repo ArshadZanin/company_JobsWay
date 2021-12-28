@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
-import 'package:jobs_way_company/pages/result_payment_page.dart';
+import 'package:jobs_way_company/pages/other_pages/result_payment_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -26,6 +26,7 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
   final widgets = Get.put(WidgetController());
 
   String amount = '';
+  String order = '';
 
   final _razorpay = Razorpay();
 
@@ -328,9 +329,9 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
                 ///here*********************************************************************************************************************************************************************///
 
 
-                var order = await orderRequest(amount: '500');
+                order = (await orderRequest(amount: '399'))!;
 
-                var result = jsonDecode(order!);
+                var result = jsonDecode(order);
 
                 amount = '${result["amount"]}';
 
@@ -432,6 +433,7 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
   required String planName,
   required String paymentId,
   required String orderId,
+    required PaymentSuccessResponse responseSuccess,
 }) async {
 
     String id = '';
@@ -449,21 +451,55 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
 
     try{
 
-      String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/verify-payment';
+      String apiUrlVerify = 'https://jobsway-company.herokuapp.com/api/v1/company/verify-payment';
 
-      final response = await http.post(Uri.parse(apiUrl), body: {
-        'id' : id,
-        'companyName' : name,
-        'amount' : amount,
-        'jobId' : widget.jobId,
-        'jobTitle' : widget.jobName,
-        'planName' : planName,
-        'paymentGateway' : "razorpay",
-        'razorpay_payment_id': paymentId,
-        'razorpay_order_id': orderId
-      });
+      var orderDetails = jsonDecode(order);
+      print(orderDetails);
+      final data = {
+        "response" : {
+          "razorpay_order_id": responseSuccess.orderId,
+          "razorpay_payment_id": responseSuccess.paymentId,
+          "razorpay_signature": responseSuccess.signature
+        },
+        "order" : orderDetails,
+        "transactionDetails" : {
+          'id' : id,
+          'companyName' : name,
+          'amount' : amount,
+          'jobId' : widget.jobId,
+          'jobTitle' : widget.jobName,
+          'planName' : planName,
+          'paymentGateway' : "razorpay",
+          'razorpay_payment_id': paymentId,
+          'razorpay_order_id': orderId
+        }
+      };
 
-      print(apiUrl);
+    print(data);
+
+      final response = await http.post(
+          Uri.parse(apiUrlVerify),
+          body: jsonEncode(data),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+          },
+      );
+
+      print(data);
+      // {
+      //   'id' : id,
+      //   'companyName' : name,
+      //   'amount' : amount,
+      //   'jobId' : widget.jobId,
+      //   'jobTitle' : widget.jobName,
+      //   'planName' : planName,
+      //   'paymentGateway' : "razorpay",
+      //   'razorpay_payment_id': paymentId,
+      //   'razorpay_order_id': orderId
+      // });
+
+
+      print(apiUrlVerify);
       print(paymentId);
       print(orderId);
       print(response.body);
@@ -516,17 +552,14 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
         planName: 'Basic',
         paymentId: response.paymentId!,
         orderId: '${response.orderId}',
+      responseSuccess: response,
     );
     print(result);
+    var jsonResult = jsonDecode('$result');
+   if(jsonResult['msg'] == 'Success'){
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
+   }
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text(
-        'Payment complete',
-        textAlign: TextAlign.center,
-      ),
-    ));
-
-    print('${response.orderId}');
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -537,9 +570,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
         textAlign: TextAlign.center,
       ),
     ));
-    print('********************************on the way***********************************************');
-    print('********************************${response.message} - ${response.code}***********************************************');
-    print('********************************on the way***********************************************');
     print('failed');
   }
 
@@ -631,8 +661,36 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
               ),
             ),
             ListTile(
-              onTap: (){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
+              onTap: () async {
+                ///here*********************************************************************************************************************************************************************///
+
+
+                order = (await orderRequest(amount: '699'))!;
+
+                var result = jsonDecode(order);
+
+                amount = '${result["amount"]}';
+
+                print(result["id"]);
+
+
+
+                var options = {
+                  'key': 'rzp_test_UmiUcM6L6WCULU',
+                  // 'key': 'rzp_test_PLUV6vdv6Zjxw6',
+                  'amount': result["amount"],
+                  'name': 'JobsWay.',
+                  'description': 'payment for add job',
+                  'timeout': 300,
+                  'order_id': result["id"],
+                  'currency': result["currency"],
+                  'prefill': {
+                    'contact': '9746802988',
+                    'email': 'arshadzanin786@gmail.com'
+                  }
+                };
+                _razorpay.open(options);
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
               },
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

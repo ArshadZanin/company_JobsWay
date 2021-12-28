@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:jobs_way_company/login_register/log_in.dart';
-import 'package:jobs_way_company/pages/home_page.dart';
-import 'package:jobs_way_company/pages/rejection_page.dart';
-import 'package:jobs_way_company/pages/waiting_page.dart';
+import 'package:jobs_way_company/pages/home_pages/home_page.dart';
+import 'package:jobs_way_company/pages/other_pages/rejection_page.dart';
+import 'package:jobs_way_company/login_register/waiting_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckPage extends StatefulWidget {

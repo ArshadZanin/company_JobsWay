@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
-import 'package:jobs_way_company/pages/waiting_page.dart';
+import 'package:jobs_way_company/login_register/waiting_page.dart';
 
 final widgets = Get.put(WidgetController());
 

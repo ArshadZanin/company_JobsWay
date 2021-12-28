@@ -9,10 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/model/login_model.dart';
-import 'package:jobs_way_company/pages/application_page.dart';
-import 'package:jobs_way_company/pages/dashboard.dart';
-import 'package:jobs_way_company/pages/jobs_page.dart';
-import 'package:jobs_way_company/pages/shortlisted_page.dart';
+import 'package:jobs_way_company/pages/home_pages/application_page.dart';
+import 'package:jobs_way_company/pages/home_pages/dashboard.dart';
+import 'package:jobs_way_company/pages/home_pages/jobs_page.dart';
+import 'package:jobs_way_company/pages/home_pages/shortlisted_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -72,6 +72,8 @@ class _HomePageState extends State<HomePage> {
             password: value.password!);
 
       } else {
+        print(response.statusCode);
+        print(response.body);
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

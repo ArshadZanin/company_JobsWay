@@ -94,6 +94,9 @@ class _AddHRState extends State<AddHR> {
 
                   var result = await addHrCompany(name: name, email: email);
 
+                  ///only before getting web hosting
+                  Navigator.pop(context);
+
                 }),
               ],
             ),

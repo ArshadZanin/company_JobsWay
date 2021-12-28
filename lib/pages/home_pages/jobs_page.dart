@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/model/job_list_hr_model.dart';
-import 'package:jobs_way_company/pages/add_job.dart';
+import 'package:jobs_way_company/pages/other_pages/add_job.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -86,13 +86,18 @@ class _JobsPageState extends State<JobsPage> {
                 widgets.headingVersaTexts(colorText: 'Jobs.'),
                 widgets.greenButton(
                     label: 'Add new job',
-                    onPress: () {
-                      Navigator.push(
+                    onPress: () async {
+                       await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => const AddJobPage(),
                         ),
                       );
+                       Future.delayed(const Duration(seconds: 2),(){
+                         setState(() {
+                         });
+                       });
+                       print("restart needed for this page");
                     },),
               ],
             ),

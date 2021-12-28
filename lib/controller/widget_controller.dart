@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jobs_way_company/pages/profile_page.dart';
+import 'package:jobs_way_company/pages/home_pages/profile_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:adaptive/adaptive.dart';
 
@@ -258,11 +258,13 @@ class WidgetController extends GetxController {
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
+                flex: 4,
                 child: Column(
                   children: [
                     Expanded(
                       child: Text(
                         jobName,
+                        overflow: TextOverflow.fade,
                         style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 15,
@@ -291,6 +293,7 @@ class WidgetController extends GetxController {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
