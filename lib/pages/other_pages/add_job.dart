@@ -41,6 +41,8 @@ class _AddJobPageState extends State<AddJobPage> {
     required String jobCategory,
     required String minExp,
     required String maxExp,
+    required String minSalary,
+    required String maxSalary,
     required String timeSchedule,
     required String qualification,
     required String education,
@@ -80,6 +82,8 @@ class _AddJobPageState extends State<AddJobPage> {
         "minExp" : minExp,
         "maxExp" : maxExp ,
         "timeSchedule" : timeSchedule ,
+        "minSalary" : minSalary,
+        "maxSalary" : maxSalary ,
         "qualification" : qualificationList,
         "education" : education ,
         "jobLocation" : jobLocation ,
@@ -87,7 +91,9 @@ class _AddJobPageState extends State<AddJobPage> {
         "language" : languageList
       };
 
+
       String jsonData = jsonEncode(jsonMap);
+      print(jsonData);
 
       String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company//add-job/$hrId?cid=$id';
 
@@ -149,15 +155,6 @@ class _AddJobPageState extends State<AddJobPage> {
 
   @override
   Widget build(BuildContext context) {
-    jobTitle.text = "Flutter Developer";
-    category.text = "software";
-    experienceFrom.text = "0";
-    experienceTo.text = "3";
-    qualification.text = "degree and any";
-    education.text = "BCA";
-    location.text = "Bangalore";
-    skills.text = "flutter,dart";
-    language.text = "english,malayalam";
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -187,7 +184,7 @@ class _AddJobPageState extends State<AddJobPage> {
                   children: [
                     Expanded(
                       child:
-                          widgets.textFieldGrey(textController: experienceFrom),
+                          widgets.textFieldGrey(textController: experienceFrom,keyboardType: TextInputType.number),
                     ),
                     widgets.textWidget(
                       text: 'To',
@@ -196,7 +193,7 @@ class _AddJobPageState extends State<AddJobPage> {
                     ),
                     Expanded(
                       child:
-                          widgets.textFieldGrey(textController: experienceTo),
+                          widgets.textFieldGrey(textController: experienceTo,keyboardType: TextInputType.number),
                     ),
                   ],
                 ),
@@ -205,7 +202,7 @@ class _AddJobPageState extends State<AddJobPage> {
                 Row(
                   children: [
                     Expanded(
-                      child: widgets.textFieldGrey(textController: salaryFrom),
+                      child: widgets.textFieldGrey(textController: salaryFrom,keyboardType: TextInputType.number),
                     ),
                     widgets.textWidget(
                       text: 'To',
@@ -213,7 +210,7 @@ class _AddJobPageState extends State<AddJobPage> {
                       bold: true,
                     ),
                     Expanded(
-                      child: widgets.textFieldGrey(textController: salaryTo),
+                      child: widgets.textFieldGrey(textController: salaryTo,keyboardType: TextInputType.number),
                     ),
                   ],
                 ),
@@ -298,6 +295,8 @@ class _AddJobPageState extends State<AddJobPage> {
                             minExp: experienceFrom.text,
                             maxExp: experienceTo.text,
                             timeSchedule: partTime == 1 ? 'partTime' : 'fullTime',
+                            minSalary: salaryFrom.text,
+                            maxSalary: salaryTo.text,
                             qualification: qualification.text,
                             education: education.text,
                             jobLocation: location.text,

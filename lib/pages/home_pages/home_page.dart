@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_way_company/controller/widget_controller.dart';
 import 'package:jobs_way_company/model/login_model.dart';
@@ -14,7 +12,6 @@ import 'package:jobs_way_company/pages/home_pages/dashboard.dart';
 import 'package:jobs_way_company/pages/home_pages/jobs_page.dart';
 import 'package:jobs_way_company/pages/home_pages/shortlisted_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,21 +23,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final widgets = Get.put(WidgetController());
 
-
   Future<void> fetchCompany() async {
-
     String id = '';
 
     final preferences = await SharedPreferences.getInstance();
     String? idGet = preferences.getString("id");
-    if(idGet != null){
+    if (idGet != null) {
       id = idGet;
     }
 
-    String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/company/$id';
+    String apiUrl =
+        'https://jobsway-company.herokuapp.com/api/v1/company/company/$id';
 
-
-    try{
+    try {
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
@@ -70,33 +65,43 @@ class _HomePageState extends State<HomePage> {
             twitter: value.twitter!,
             facebook: value.facebook!,
             password: value.password!);
-
       } else {
         print(response.statusCode);
         print(response.body);
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${result['error']}',textAlign: TextAlign.center,),
+            content: Text(
+              '${result['error']}',
+              textAlign: TextAlign.center,
+            ),
           ));
         }
         // return null;
       }
-    }on SocketException {
+    } on SocketException {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Check network connection',textAlign: TextAlign.center,),
+        content: Text(
+          'Check network connection',
+          textAlign: TextAlign.center,
+        ),
       ));
     } on TimeoutException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$e',textAlign: TextAlign.center,),
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
       ));
     } on Error catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$e',textAlign: TextAlign.center,),
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
       ));
     }
   }
-
 
   @override
   void initState() {
@@ -121,14 +126,34 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: const Material(
           color: Color(0xFFF2F2F2),
           child: TabBar(
-            indicatorColor: Colors.transparent,
+              indicatorColor: Colors.transparent,
               unselectedLabelColor: Colors.grey,
               labelColor: Color(0xFF008FAE),
               tabs: <Widget>[
-                Tab(icon: Icon(Icons.home,size: 28,),),
-                Tab(icon: Icon(Icons.pages,size: 28,),),
-                Tab(icon: Icon(Icons.article,size: 28,),),
-                Tab(icon: Icon(Icons.list,size: 28,),),
+                Tab(
+                  icon: Icon(
+                    Icons.home,
+                    size: 28,
+                  ),
+                ),
+                Tab(
+                  icon: Icon(
+                    Icons.pages,
+                    size: 28,
+                  ),
+                ),
+                Tab(
+                  icon: Icon(
+                    Icons.article,
+                    size: 28,
+                  ),
+                ),
+                Tab(
+                  icon: Icon(
+                    Icons.list,
+                    size: 28,
+                  ),
+                ),
               ]),
         ),
       ),
@@ -168,5 +193,4 @@ class _HomePageState extends State<HomePage> {
     await preferences.setString("facebook", facebook);
     await preferences.setString("password", password);
   }
-
 }

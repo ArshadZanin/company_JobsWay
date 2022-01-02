@@ -76,10 +76,12 @@ class WidgetController extends GetxController {
     );
   }
 
-  Widget textFieldGrey(
-      {String label = '',
-      TextEditingController? textController,
-      int maxLines = 1}) {
+  Widget textFieldGrey({
+    String label = '',
+    TextEditingController? textController,
+    int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -88,6 +90,7 @@ class WidgetController extends GetxController {
         color: const Color(0xFFE6E6E6),
       ),
       child: TextFormField(
+        keyboardType: keyboardType,
         maxLines: maxLines,
         controller: textController,
         decoration: InputDecoration(
@@ -189,15 +192,18 @@ class WidgetController extends GetxController {
       onPressed: onPress,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: isLoading ?
-        const SizedBox(
-          height: 25,
-            width: 25,
-            child: CircularProgressIndicator.adaptive(strokeWidth: 1,),) :
-        Text(
-          text,
-          style: GoogleFonts.poppins(color: Colors.white),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator.adaptive(
+                  strokeWidth: 1,
+                ),
+              )
+            : Text(
+                text,
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
       ),
     );
   }
@@ -732,7 +738,13 @@ class WidgetController extends GetxController {
                     borderRadius: BorderRadius.circular(15),
                     color: Colors.grey,
                   ),
-                  // child: Image.network(imageSrc,fit: BoxFit.cover,),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      imageSrc,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   width: 10,
@@ -747,16 +759,30 @@ class WidgetController extends GetxController {
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
-                      iconText(icon: Icons.location_on_outlined, text: place),
-                      iconText(icon: Icons.email_outlined, text: email),
-                      iconText(icon: Icons.phone_outlined, text: phone),
                       iconText(
-                          icon: Icons.person_pin_outlined, text: 'Portfolio'),
+                        icon: Icons.location_on_outlined,
+                        text: place,
+                      ),
                       iconText(
-                          icon: Icons.text_snippet_outlined, text: 'Resume'),
+                        icon: Icons.email_outlined,
+                        text: email,
+                      ),
                       iconText(
-                          icon: Icons.upcoming_outlined,
-                          text: '$experience of Experience'),
+                        icon: Icons.phone_outlined,
+                        text: phone,
+                      ),
+                      iconText(
+                        icon: Icons.person_pin_outlined,
+                        text: 'Portfolio',
+                      ),
+                      iconText(
+                        icon: Icons.text_snippet_outlined,
+                        text: 'Resume',
+                      ),
+                      iconText(
+                        icon: Icons.upcoming_outlined,
+                        text: '$experience of Experience',
+                      ),
                     ],
                   ),
                 ),

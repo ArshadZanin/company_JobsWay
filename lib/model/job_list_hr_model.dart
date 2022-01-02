@@ -28,6 +28,8 @@ class JobList {
     this.minExp,
     this.maxExp,
     this.timeSchedule,
+    this.minSalary,
+    this.maxSalary,
     this.qualification,
     this.education,
     this.jobLocation,
@@ -45,6 +47,8 @@ class JobList {
   String? minExp;
   String? maxExp;
   String? timeSchedule;
+  String? minSalary;
+  String? maxSalary;
   List<String>? qualification;
   String? education;
   String? jobLocation;
@@ -62,6 +66,8 @@ class JobList {
     minExp: json["minExp"],
     maxExp: json["maxExp"],
     timeSchedule: json["timeSchedule"],
+    minSalary: json["minSalary"],
+    maxSalary: json["maxSalary"],
     qualification: List<String>.from(json["qualification"].map((x) => x)),
     education: json["education"],
     jobLocation: json["jobLocation"],
@@ -80,6 +86,8 @@ class JobList {
     "minExp": minExp,
     "maxExp": maxExp,
     "timeSchedule": timeSchedule,
+    "minSalary": minSalary,
+    "maxSalary": maxSalary,
     "qualification": List<dynamic>.from(qualification!.map((x) => x)),
     "education": education,
     "jobLocation": jobLocation,

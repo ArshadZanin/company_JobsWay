@@ -20,7 +20,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   final widgets = Get.put(WidgetController());
   File? image;
   Uint8List? bytesImage;
@@ -43,10 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
   initState() {
     super.initState();
     retrieveData().whenComplete(() {
-      setState(() {
-      });
+      setState(() {});
     });
-
   }
 
   @override
@@ -64,17 +61,30 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const HrPage(),),);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HrPage(),
+                ),
+              );
             },
-            icon: const Icon(Icons.person_add_alt),),
-          IconButton(onPressed: () async {
+            icon: const Icon(Icons.person_add_alt),
+          ),
+          IconButton(
+            onPressed: () async {
+              final preferences = await SharedPreferences.getInstance();
+              preferences.clear();
 
-            final preferences = await SharedPreferences.getInstance();
-            preferences.clear();
-
-            Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LogIn(),),);
-          },icon: const Icon(Icons.logout),),
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const LogIn(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout),
+          ),
         ],
         elevation: 0,
       ),
@@ -97,11 +107,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 200,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: bytesImage != null ?
-                        Image.memory(
-                          bytesImage!,
-                          fit: BoxFit.cover,
-                        ):Container(),
+                        child: bytesImage != null
+                            ? Image.memory(
+                                bytesImage!,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(),
                       ),
                     ),
                   ),
@@ -109,47 +120,59 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Center(
                 child: widgets.textWidget(
-                    text: companyName,
+                  text: companyName,
                   size: 30,
                   bold: true,
                   padding: const EdgeInsets.all(16),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.iconText(
-                  icon: Icons.corporate_fare_outlined,
-                  text: industry,
+                icon: Icons.corporate_fare_outlined,
+                text: industry,
                 textSize: 20,
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.iconText(
-                  icon: Icons.location_on_outlined,
-                  text: location,
+                icon: Icons.location_on_outlined,
+                text: location,
                 textSize: 20,
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.iconText(
-                  icon: Icons.mail_outlined,
-                  text: email,
+                icon: Icons.mail_outlined,
+                text: email,
                 textSize: 20,
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.iconText(
-                  icon: Icons.phone_outlined,
-                  text: phone,
+                icon: Icons.phone_outlined,
+                text: phone,
                 textSize: 20,
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.textWidget(
                 text: 'Bio :',
                 size: 22,
                 bold: true,
               ),
               Text(
-                  about,
+                about,
                 style: GoogleFonts.poppins(fontSize: 20),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               widgets.textWidget(
                 text: 'Social Media :',
                 size: 22,
@@ -158,39 +181,48 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.link),
-                  const SizedBox(width: 5,),
-                  widgets.textWidget(text: website,bold: true),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  widgets.textWidget(text: website, bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.instagram),
-                  const SizedBox(width: 5,),
-                  widgets.textWidget(text: instagram,bold: true),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  widgets.textWidget(text: instagram, bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.facebook),
-                  const SizedBox(width: 5,),
-                  widgets.textWidget(text: facebook,bold: true),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  widgets.textWidget(text: facebook, bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.twitter),
-                  const SizedBox(width: 5,),
-                  widgets.textWidget(text: twitter,bold: true),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  widgets.textWidget(text: twitter, bold: true),
                 ],
               ),
               Row(
                 children: [
                   const FaIcon(FontAwesomeIcons.linkedin),
-                  const SizedBox(width: 5,),
-                  widgets.textWidget(text: linkedin,bold: true),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  widgets.textWidget(text: linkedin, bold: true),
                 ],
               ),
-
             ],
           ),
         ),
@@ -198,14 +230,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> retrieveData() async{
+  Future<void> retrieveData() async {
     final preferences = await SharedPreferences.getInstance();
     String? result = preferences.getString("image");
     bytesImage = base64Decode(result!);
 
     String? companyNameGet = preferences.getString("companyName");
     companyName = companyNameGet!;
-
 
     String? industryGet = preferences.getString("industry");
     industry = industryGet!;
@@ -241,9 +272,6 @@ class _ProfilePageState extends State<ProfilePage> {
     password = passwordGet!;
     confirmPassword = passwordGet;
 
-
-    setState(() {
-
-    });
+    setState(() {});
   }
 }

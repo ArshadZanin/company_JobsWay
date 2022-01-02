@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobs_way_company/controller/widget_controller.dart';
@@ -21,19 +22,16 @@ class _JobsPageState extends State<JobsPage> {
   final widgets = Get.put(WidgetController());
 
   Future<JobListHr?> fetchJobHr() async {
-
     String id = '';
-
     final preferences = await SharedPreferences.getInstance();
     String? idGet = preferences.getString("hrId");
-    if(idGet != null){
+    if (idGet != null) {
       id = idGet;
     }
+    String apiUrl =
+        'https://jobsway-company.herokuapp.com/api/v1/company/jobs/$id';
 
-    String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/jobs/$id';
-
-
-    try{
+    try {
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
@@ -46,25 +44,36 @@ class _JobsPageState extends State<JobsPage> {
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${result['error']}',textAlign: TextAlign.center,),
+            content: Text(
+              '${result['error']}',
+              textAlign: TextAlign.center,
+            ),
           ));
         }
         return null;
       }
-    }on SocketException {
+    } on SocketException {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Check network connection',textAlign: TextAlign.center,),
+        content: Text(
+          'Check network connection',
+          textAlign: TextAlign.center,
+        ),
       ));
     } on TimeoutException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$e',textAlign: TextAlign.center,),
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
       ));
     } on Error catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('$e',textAlign: TextAlign.center,),
+        content: Text(
+          '$e',
+          textAlign: TextAlign.center,
+        ),
       ));
     }
-
   }
 
   @override
@@ -85,44 +94,49 @@ class _JobsPageState extends State<JobsPage> {
               children: [
                 widgets.headingVersaTexts(colorText: 'Jobs.'),
                 widgets.greenButton(
-                    label: 'Add new job',
-                    onPress: () async {
-                       await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AddJobPage(),
-                        ),
-                      );
-                       Future.delayed(const Duration(seconds: 2),(){
-                         setState(() {
-                         });
-                       });
-                       print("restart needed for this page");
-                    },),
+                  label: 'Add new job',
+                  onPress: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AddJobPage(),
+                      ),
+                    );
+                    Future.delayed(const Duration(seconds: 2), () {
+                      setState(() {});
+                    });
+                    print("restart needed for this page");
+                  },
+                ),
               ],
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Expanded(
               child: FutureBuilder(
                 future: fetchJobHr(),
-                builder: (BuildContext context, AsyncSnapshot<JobListHr?> snapshot) {
-                  if(snapshot.hasData){
+                builder:
+                    (BuildContext context, AsyncSnapshot<JobListHr?> snapshot) {
+                  if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data!.jobList!.length,
                       itemBuilder: (BuildContext context, int index) {
                         var value = snapshot.data!.jobList![index];
                         return widgets.jobCardBlack(
-                          postTime: '10 days',
-                          jobName: value.jobTitle!,
-                          salaryRange: '30000 - 50000',
-                          experience: '${value.minExp} - ${value.maxExp} Year',
-                          jobTime: value.timeSchedule!
-                        );
+                            postTime: '10 days',
+                            jobName: value.jobTitle!,
+                            salaryRange: '${value.minSalary} - ${value.maxSalary}',
+                            experience:
+                                '${value.minExp} - ${value.maxExp} Year',
+                            jobTime: value.timeSchedule!);
                       },
                     );
-                  }else{
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                  } else {
+                    return Center(
+                      child: Platform.isAndroid
+                          ? const CircularProgressIndicator()
+                          : const CupertinoActivityIndicator(),
                     );
                   }
                 },

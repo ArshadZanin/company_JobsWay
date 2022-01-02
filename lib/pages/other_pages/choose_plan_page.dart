@@ -13,10 +13,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class ChoosePlanPage extends StatefulWidget {
-  ChoosePlanPage({Key? key, required this.jobId, required this.jobName}) : super(key: key);
+ const ChoosePlanPage({Key? key, required this.jobId, required this.jobName}) : super(key: key);
 
-  String? jobId;
-  String? jobName;
+  final String jobId;
+  final String jobName;
 
   @override
   _ChoosePlanPageState createState() => _ChoosePlanPageState();
@@ -24,6 +24,8 @@ class ChoosePlanPage extends StatefulWidget {
 
 class _ChoosePlanPageState extends State<ChoosePlanPage> {
   final widgets = Get.put(WidgetController());
+
+  String planName = '';
 
   String amount = '';
   String order = '';
@@ -205,17 +207,14 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
 
     String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/add-free-plan/$id';
 
-    print(widget.jobId);
-
     try{
       final response = await http.post(Uri.parse(apiUrl), body: {
         "jobId" : widget.jobId
       });
-      print(response.statusCode);
-      print(response.body);
 
       if (response.statusCode == 200) {
         final String responseString = response.body;
+
         print(responseString);
 
         return true;
@@ -328,6 +327,7 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
               onTap: () async {
                 ///here*********************************************************************************************************************************************************************///
 
+                planName = 'Basic';
 
                 order = (await orderRequest(amount: '399'))!;
 
@@ -335,13 +335,10 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
 
                 amount = '${result["amount"]}';
 
-                print(result["id"]);
-
 
 
                 var options = {
                   'key': 'rzp_test_UmiUcM6L6WCULU',
-                  // 'key': 'rzp_test_PLUV6vdv6Zjxw6',
                   'amount': result["amount"],
                   'name': 'JobsWay.',
                   'description': 'payment for add job',
@@ -354,7 +351,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
                   }
                 };
                 _razorpay.open(options);
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
               },
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -387,7 +383,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
     }
 
     String apiUrl = 'https://jobsway-company.herokuapp.com/api/v1/company/razorpay/addjobpayment/$id';
-    print(apiUrl);
 
 
     try{
@@ -399,9 +394,7 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
       if (response.statusCode == 200) {
         final String responseString = response.body;
 
-        print(responseString);
         return responseString;
-        // return loginFromJson(responseString);
       } else {
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
@@ -454,7 +447,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
       String apiUrlVerify = 'https://jobsway-company.herokuapp.com/api/v1/company/verify-payment';
 
       var orderDetails = jsonDecode(order);
-      print(orderDetails);
       final data = {
         "response" : {
           "razorpay_order_id": responseSuccess.orderId,
@@ -475,8 +467,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
         }
       };
 
-    print(data);
-
       final response = await http.post(
           Uri.parse(apiUrlVerify),
           body: jsonEncode(data),
@@ -485,32 +475,11 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
           },
       );
 
-      print(data);
-      // {
-      //   'id' : id,
-      //   'companyName' : name,
-      //   'amount' : amount,
-      //   'jobId' : widget.jobId,
-      //   'jobTitle' : widget.jobName,
-      //   'planName' : planName,
-      //   'paymentGateway' : "razorpay",
-      //   'razorpay_payment_id': paymentId,
-      //   'razorpay_order_id': orderId
-      // });
-
-
-      print(apiUrlVerify);
-      print(paymentId);
-      print(orderId);
-      print(response.body);
 
       if (response.statusCode == 200) {
         final String responseString = response.body;
 
-        print("hello");
-        print(responseString);
         return responseString;
-        // return loginFromJson(responseString);
       } else {
         final result = jsonDecode(response.body);
         if (result['error'] != null) {
@@ -549,12 +518,11 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
 
 
     var result = await orderConfirm(
-        planName: 'Basic',
+        planName: planName,
         paymentId: response.paymentId!,
         orderId: '${response.orderId}',
       responseSuccess: response,
     );
-    print(result);
     var jsonResult = jsonDecode('$result');
    if(jsonResult['msg'] == 'Success'){
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
@@ -563,25 +531,21 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    // Do something when payment fails
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
         'Payment Failed',
         textAlign: TextAlign.center,
       ),
     ));
-    print('failed');
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    // Do something when an external wallet is selected
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
         'Trying External Wallet',
         textAlign: TextAlign.center,
       ),
     ));
-    print('trying');
   }
 
 
@@ -665,19 +629,18 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
                 ///here*********************************************************************************************************************************************************************///
 
 
+                planName = 'Premium';
+
                 order = (await orderRequest(amount: '699'))!;
 
                 var result = jsonDecode(order);
 
                 amount = '${result["amount"]}';
 
-                print(result["id"]);
-
 
 
                 var options = {
                   'key': 'rzp_test_UmiUcM6L6WCULU',
-                  // 'key': 'rzp_test_PLUV6vdv6Zjxw6',
                   'amount': result["amount"],
                   'name': 'JobsWay.',
                   'description': 'payment for add job',
@@ -690,7 +653,6 @@ class _ChoosePlanPageState extends State<ChoosePlanPage> {
                   }
                 };
                 _razorpay.open(options);
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(),),);
               },
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
